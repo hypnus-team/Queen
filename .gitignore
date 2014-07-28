@@ -1,0 +1,4 @@
+*.bak
+*.obj
+*.db
+*.cache.php
