@@ -1,0 +1,27 @@
+<hr>
+{subtemplate header_warning} 
+<!--{if (!$lasterror)}-->
+ <a id="panel_flag_{$clientId}" ></a>
+ <div id="app_panel_show">
+ <table class="table">
+  <thead><tr><th>{$drone_name}</th><td>&nbsp;
+    <a href="javascript:client_panel('0')"><i class="icon-remove" title="close"></i></a><!--{/if}--></td><td></td></tr></thead>	  
+	<!--{loop $app_array $key $value}-->
+	<!--{if (0 == $key%3)}-->
+	<tr>
+	<!--{/if}-->
+	  <td><div align="center" >
+	  <!--{if (!$value)}-->
+	      <a href="javascript:mod_manage('{$clientId}')" OnClick="location.href='#top'"><img src="./repo/modules/00010000000000000000000000000000/logo.jpg" title="{$language['app_manage']}"></a><p><strong>{$language['app_manage']}</strong></p>
+	  <!--{else}-->
+		  <a OnClick="location.href='#top'" href="javascript:open_mod_multi('{$clientId}','{$value['module']}')">		  
+		  <img src="./repo/modules/{$value['module']}/logo.jpg" title="{$value['name']}"></a><p><strong>{$value['title']}</strong></p>
+      <!--{/if}-->
+	  </div></td>
+    <!--{if (2 == $key%3)}-->
+    </tr>
+	<!--{/if}-->
+	<!--{/loop}-->
+ </table>
+ <div id="mod_panel"></div>
+ </div>

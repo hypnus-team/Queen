@@ -1,0 +1,71 @@
+<hr>		
+{subtemplate header_warning}
+<!--{if (!$lasterror)}-->
+<table class="table table-hover">
+<thead><tr><td><input type="checkbox" onclick="chkAll()" name="chkAll"/></td><th>{$language['panel']}<!--{if $filter}-->&nbsp;-&nbsp;{$language['filter']}<!--{elseif $filter_addition}-->&nbsp;-&nbsp;{$language['after_filter']}<!--{/if}--></th><td></td><td>&nbsp;&nbsp;<a href="javascript:multi_clients_list_load(1)"><i class="icon-refresh" title="refresh"></i></a></td><td>&nbsp;</td></tr></thead>
+<!--{if $list_machine}-->
+  <!--{loop $list_machine $key $value}-->	    
+	<tr>
+	<td>
+	<input type="checkbox" onclick="javascript:mycheckbox()" name="opMachine" value ="{$value['mid']}{$value['uniqu']}" />
+	</td>
+	<td>	
+	<a OnClick="location.href='#top'" href="javascript:multi_show_panel('{$value['cid']}')">	
+	{$value['machine_name']}</font></a>
+	</td>
+	<td>
+	<a href="#multi_panel_top" OnClick="javascript:client_panel({$value['cid']});"><i class="icon-list-alt" title="{$language['DronePanel']}"></i></a></td>
+	<td>		
+	<div class="btn-group pull-right">
+	<!--{if $shortcuts_array[$value['mid']]}-->  
+	  <a class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+	  <ul class="dropdown-menu">
+	      <!--{if $token_shortcuts_array[$value['mid']]}-->
+		    <!--{loop $token_shortcuts_array[$value['mid']] $shortcuts_key $shortcuts_value}-->
+			  <li><a OnClick="location.href='#top'" href="javascript:multi_exec_shortcut('{$shortcuts_value['sid']}','{$value['cid']}','{$shortcuts_value['module']}')">		  
+			  <i class="icon-plane"></i>&nbsp;{$shortcuts_value['name']}</a></li>
+			<!--{/loop}-->
+		    <li class="divider"></li>
+		  <!--{/if}-->
+		  <!--{loop $shortcuts_array[$value['mid']] $shortcuts_key $shortcuts_value}-->
+		    <li><a OnClick="location.href='#top'" href="javascript:multi_exec_shortcut('{$shortcuts_value['sid']}','{$value['cid']}','{$shortcuts_value['module']}')">		  
+		    <i class="icon-plane"></i>&nbsp;{$shortcuts_value['name']}</a></li>
+		  <!--{/loop}-->			
+	  </ul>
+	<!--{else}-->
+	  <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+	  <ul class="dropdown-menu">
+		  <li>&nbsp;-&nbsp;{$language['no_shortcuts']}</li>
+	  </ul>		      
+	<!--{/if}-->
+	</div>		
+	</td>
+	<td>
+	<!--{loop $value['token'] $token_key $token_value}-->
+    <span class="label label-info">{$token_value}</span>
+	<!--{/loop}-->   
+	</td>
+	</tr>
+  <!--{/loop}-->	  
+<!--{else}-->
+  <tr>
+  <td>&nbsp;</td>
+  <td><!--{$language['list_is_empty']}--></td>
+  <td>&nbsp;</td>
+  </tr>
+<!--{/if}-->
+</table>  
+<!--{/if}-->
+
+<script>
+$(function(){
+    $('#chkAll').live('click',function(ev){
+         $('INPUT[name=opMachine]').attr('checked',$('#chkAll').prop('checked'));
+    });
+
+    $('INPUT[name=opMachine]').click(function(ev){
+        $('#chkAll').attr('checked',
+            $('INPUT[name=opMachine]:checked').length == $('INPUT[name=opMachine]').length);
+    });
+});
+</script>

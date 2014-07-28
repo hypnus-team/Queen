@@ -1,0 +1,11 @@
+<!--{if ((0 == $r) || (6 == $r))}-->
+<span class="label label-success">
+<!--{else}-->
+<span class="label label-important">
+<!--{/if}-->
+<!--{if ($warning[$r])}-->
+    <!--{$warning[$r]}-->
+<!--{else}-->
+    unkown ret:<!--{$r}-->
+<!--{/if}-->
+</span>

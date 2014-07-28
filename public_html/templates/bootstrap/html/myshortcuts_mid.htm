@@ -1,0 +1,10 @@
+<div id="div_{$v['sid']}">
+	 <select class="input-mini" id="select_{$v['sid']}" OnChange="javascript:set_mod_version('{$v['sid']}');">
+	 <!--{loop $total_modules['index'][$total_modules['content'][$v['module']]['root']] $c_version $c_mid}-->
+	 <option value="{$c_mid}" {if ($c_mid == $v['module'])}selected="selected"{/if}><!--{$c_version}--></option>
+	 <!--{/loop}-->
+	 </select>
+	 <!--{if ($total_modules['content'][$v['module']]['version'] != $total_modules['latest_version'][$total_modules['content'][$v['module']]['root']])}-->
+	 &nbsp;<i class="icon-circle-arrow-up" title="{$language['upgradable']}"></i>
+	 <!--{/if}-->
+ </div>

@@ -1,0 +1,12 @@
+<hr>
+{subtemplate header_warning} 
+<!--{if (!$lasterror)}-->
+     <table class="table">
+	  <thead><tr><td>&nbsp;</td><th><!--{$language['group']}--></th><td>&nbsp;&nbsp;<a href="javascript:group_list_load()"><i class="icon-refresh" title="refresh"></i></a></td></tr></thead>
+	  	
+	    <!--{loop $group_list $key $value}-->
+	    <tr><td><i class="icon-trash" title="{$language['dissolve_group']}"></i></td><td><!--<a href="./group_operate.php?gid={$key}">-->{$value['name']}<!--</a>--></td><td>{$value['online']}</td></tr> 
+	    <!--{/loop}-->
+		<tr><td></td><td><input type="text" value="" name="new_group" placeholder="{$language['new_group_name']}"></td><td><button class="btn btn-primary">{$language['create_group']}</button></td></tr>    
+     </table>
+<!--{/if}-->

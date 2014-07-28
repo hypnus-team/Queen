@@ -1,0 +1,225 @@
+<!--{if (!$responseonly)}-->
+{subtemplate header}
+<!--{/if}-->
+{subtemplate header_warning}
+<!--{if (!$lasterror)}-->
+<!--{if (!$responseonly)}-->
+<div class="row">
+
+
+
+<!--{if ($account_act == 6)}-->
+  <div class="span3 offset1"> 
+<!--{elseif ($account_act == 7)}-->
+  <div class="span6 offset1"> 
+<!--{else}-->
+  <div class="span4 offset2">
+<!--{/if}-->
+   <hr>
+   {subtemplate mylist}
+<!--{/if}-->
+
+<!--{if ($account_act == 6)}-->
+    <b>{$language['charactor_setup']}</b>
+    <hr>        
+    <form action="./myaccount.php?a=6" method="post">
+	<input type="hidden" value="charactor" name="setup_type">
+    <label for="user_login">{$language['account_alias']}</label>
+    <input type="text" disabled="disabled" value="$account_alias" name="account_alias">
+    <label for="user_login">{$language['account_language']}</label>
+	    <select name="account_language" disabled="disabled" id="account_language">
+	    <!--{loop $language['language_type'] $key $value}-->
+	    <option value="$key" {if ($charactor_language == $key)}selected="selected"{/if}>{$value}</option>
+		<!--{/loop}-->
+		</select>
+	<label for="user_login">{$language['account_style_setup']}</label>
+	    <select name="account_style" disabled="disabled" id="account_style">
+	    <!--{loop $language['style_type'] $key $value}-->
+	    <option value="$key" {if ($charactor_style == $key)}selected="selected"{/if}>{$value}</option>
+		<!--{/loop}-->
+	    </select>
+	<label for="user_login">{$language['account_mail_setup']}</label>
+	    <select name="account_reject_mail" disabled="disabled" id="account_reject_mail">
+	    <option value="0">{$language['accept']}</option>
+		<option value="1" {if ($charactor_reject_mail == 1)}selected="selected"{/if}>{$language['reject']}</option>
+	    </select>
+    <br>
+    <input class="btn btn-primary disabled" type="button" value="{$language['not_now_yet']}">
+	</form>
+  </div>
+
+  <div class="span3 offset1"> 
+   <hr>
+     <b>{$language['secret_setup']}</b>
+    <hr> 
+	<form action="./myaccount.php?a=6" method="post">
+	<input type="hidden" value="secret" name="setup_type">
+	<label for="user_login">{$language['secret_dynamic_proxy']}</label>
+	<select name="secret_dynamic_proxy" id="secret_dynamic_proxy">
+        <option value="0" {if ($secret_dynamic_proxy == 0)}selected="selected"{/if}>{$language['reject']}</option>
+		<option value="1" {if ($secret_dynamic_proxy == 1)}selected="selected"{/if}>{$language['accept']}</option>
+	    </select>
+	<label for="user_login">{$language['secret_vaild_logon']}</label>
+	<select name="secret_vaild_logon" id="secret_vaild_logon">
+        <!--{loop $language['secret_vaild_logon_type'] $key $value}-->
+	    <option value="$key" {if ($secret_vaild_logon == $key)}selected="selected"{/if}>{$value}</option>
+		<!--{/loop}-->
+		</select>
+	<label for="user_login">{$language['secret_auto_logout_without_opt']}</label>
+	<select name="secret_auto_logout_without_opt" id="secret_auto_logout_without_opt">
+        <!--{loop $language['secret_auto_logout_without_opt_type'] $key $value}-->
+	    <option value="$key" {if ($secret_auto_logout_without_opt == $key)}selected="selected"{/if}>{$value}</option>
+		<!--{/loop}-->
+		</select>
+	<label for="user_login">{$language['secret_ssl_setup']}</label>
+		<select name="secret_ssl_opt" id="secret_ssl_opt">
+        <!--{loop $language['secret_ssl_setup_opt_type'] $key $value}-->
+	    <option value="$key" {if ($secret_ssl_setup_opt == $key)}selected="selected"{/if}>{$value}</option>
+		<!--{/loop}-->
+		</select>
+    <br>	
+    <input class="btn btn-primary" type="submit" value="{$language['submit']}">
+	</form>
+  </div>
+
+  <div class="span3 offset1">	
+	<hr>
+	<b>{$language['others_setup']}</b>
+    <hr> 
+   	<label for="user_login">$language['input_opt_code']</label>
+	<form action="./myaccount.php?a=6" method="post">	
+	<input type="text" disabled="disabled" value="" name="input_opt_code">
+	<br>
+	<input class="btn btn-primary disabled" type="button" value="{$language['apply']}">
+	</form>
+	<label for="user_login">$language['refer_url']</label>
+    <!--{if $refer_id}-->
+	<font color=blue><b>http://www.hypnusoft.com/?r=$refer_id</b></font>
+	<!--{else}-->
+	<form action="./myaccount.php?a=6" method="post">
+	<input type="hidden" value="1" name="get_refer_url">
+    <input class="btn btn-primary disabled" type="button" value="{$language['not_now_yet']}">
+	</form>
+	<!--{/if}-->
+<!--{elseif ($account_act == 7)}-->
+    <!--{if (!$responseonly)}-->
+	  <b>{$language['token_setup']}</b>
+	  <hr>   
+	  <table class="table">
+	  <thead><tr><td>{$language['token_num']}</td><td>{$language['token_remark']}</td><td>{$language['operation']}</td></tr></thead>
+    <!--{/if}-->
+	  <!--{loop $c_token $key $value}-->
+    <!--{if (!$responseonly)}-->
+	  <tr>
+	  <td>{$value['token']}</td>
+	  <td>
+	  <div id="{$value['token']}_remark_comment">
+	<!--{/if}-->	
+	  <div id="{$value['token']}_remark" style="display:block">
+	  <!--{loop $value['remark'] $a $b}-->
+	    <span class="label label-info">{$b}</span>
+	  <!--{/loop}-->	
+	  </div>
+	  <div id="{$value['token']}_comment" style="display:none"><input type="text" value="{$value['comment']}" id="{$value['token']}"></div>
+	  </div>
+    <!--{if (!$responseonly)}-->
+	  </td>
+	  <td><div id="{$value['token']}_save" style="display:none;"><input OnClick="javascript:token_mana_save('{$value['token']}');" type="submit" class="btn btn-small btn-warning" value="{$language['token_save']}"></div><div id="{$value['token']}_edit" style="display:block;"><input OnClick="javascript:token_mana_edit('{$value['token']}','{$value['comment']}');" type="submit" class="btn btn-small btn-info" value="{$language['token_edit']}"></div>
+	  <div id="{$value['token']}_load" style="display:none"><img src="./templates/bootstrap/img/loading-mini.gif"></div>
+	  </td>
+	  </tr>
+    <!--{/if}-->
+      <!--{/loop}-->
+    <!--{if (!$responseonly)}-->
+	  <!--{if ($max_token > 0)}-->
+	    <tr>
+	    <form action="./myaccount.php?a=7" method="post">
+	    <td></td><td><input type="text" value="" placeholder="{$language['token_remark_exa']}" name="new_comment"></td><td><input type="submit" class="btn btn-primary" value="{$language['token_new']}"></td></tr>
+	    </form>
+	  <!--{/if}-->
+	  </table>
+	  <script src="{$tplpath}/js/hyp_token_manage.js"></script> 
+	<!--{/if}-->
+<!--{else}-->   
+	<!--{if ($account_act == 1)}-->    
+		<b>{$language['changpsw']}</b>
+		<hr>	
+		<form action="./myaccount.php?a=1" method="post">
+		<label for="user_login"><!--{$language['oldpsw']}--></label>
+		<input type="password" name="oldpsw" value=""/>
+		<label for="user_login"><!--{$language['newpsw']}--></label>
+		<input type="password" name="newpsw" value=""/>
+		<label for="user_login"><!--{$language['newpsw_02']}-->
+		<input type="password" name="newpsw_02" value=""/>
+		<input class="btn btn-primary" type="submit" value="{$language['submit']}">
+		</form>
+		</table>
+    <!--{elseif ($account_act == 2)}-->
+		<b>{$language['clientgen']}</b>
+		<hr>
+		<div class="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>Warning!</strong> <!--{$language['notice_open_source']}-->
+		</div>     
+		<table  class="table">
+		<thead><tr><td>
+		<!--{$language['set_drone_token']}-->
+		</td>
+		<td>
+		<select id="drone_token">
+		<!--{loop $my_token $key $value}-->
+	    <option value="{$key}"><!--{$value}--></option>
+		<!--{/loop}-->
+		</select>
+		</td></tr></thead>
+		<tr><td><!--{$language['set_drone_os']}--></td><td>
+		<select id="drone_bit">
+		<!--{loop $language['drone_os'] $key $value}-->
+		    <option value="{$key}">{$value}</option>
+		<!--{/loop}-->
+		</select>
+		</td></tr>
+		<tr><td><!--{$language['set_drone_type']}--></td><td>		
+		<select id="drone_type">
+		<!--{loop $language['drone_type'] $key $value}-->
+           <option value="{$key}">{$value}</option>
+		<!--{/loop}-->
+		</select>
+		</td></tr>
+		<tr><td></td><td><input type="button" class="btn btn-primary" OnClick="javascript:gen_drone('{$baseDir}','{$ssl_valid}');" value="{$language['drone_gen']}"></td></tr>
+		</table>
+		<div id="gen_drone_notice" style="display:none;">
+		<div class="alert">
+		  <button type="button" class="close" data-dismiss="alert">&times;</button>
+		  <strong>Warning!</strong> <!--{$language['gen_drone_notice_ssl_valide']}-->.
+ 	    </div>       
+        </div>
+		<div id="gen_drone_url"></div>
+		<script>
+		function gen_drone(basedir,ssl_valid){
+			var result = "<span class=\"label label-success\"> wget \""+basedir+"/mydrone.php?token=";
+			var obj = document.getElementById("drone_token");
+            result += obj.options[obj.selectedIndex].value;
+			    obj = document.getElementById("drone_bit");
+            result += "&bit="+obj.options[obj.selectedIndex].value;
+			    obj = document.getElementById("drone_type");
+            if ((false == ssl_valid) && (0 != obj.options[obj.selectedIndex].value)){
+                document.getElementById('gen_drone_notice').style.display = "block";
+			}else{
+			    document.getElementById('gen_drone_notice').style.display = "none";
+			}
+            result += "&ssl="+obj.options[obj.selectedIndex].value;
+			result += "\" -O drone </span>";
+		    document.getElementById('gen_drone_url').innerHTML = result;			
+		}
+		</script>
+	<!--{/if}-->
+<!--{/if}-->
+<!--{if (!$responseonly)}-->
+</div>
+</div>
+<!--{/if}-->
+<!--{/if}-->
+<!--{if (!$responseonly)}-->
+{subtemplate footer}
+<!--{/if}-->

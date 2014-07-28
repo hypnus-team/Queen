@@ -1,0 +1,39 @@
+{subtemplate header}
+
+
+
+
+<!--{if ($article)}-->
+   
+
+<div class="row">
+
+  <div class="span7 offset3">
+    <b><!--{$questions[$article]}--></b>
+	<hr>
+	<!--{$answers[$article]}-->
+	<hr>
+	<input class="btn btn-primary"  type= "button" name= "Submit"  value= "{$language['goback']}"   onclick= "javascript:history.back(1)"/>
+  </div>
+</div>
+<!--{else}-->
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <!--{loop $language_type $key $value}-->
+        <div class="span4">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+			  <li class="nav-header"><!--{$key}--></li>
+              <!--{loop $value $key $v}-->
+	          <li><a href="./readme.php?article={$v}"><font color="#8091D3"><!--{$questions[$v]}--></font></a></li>
+              <!--{/loop}-->
+			</ul>
+            </div>
+		</div>
+      <!--{/loop}-->  
+	  </div>
+    </div>
+  
+<!--{/if}-->
+
+{subtemplate footer}

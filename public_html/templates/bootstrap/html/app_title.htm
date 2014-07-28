@@ -1,0 +1,19 @@
+   <div class="btn-group">
+   <a class="btn btn-primary  dropdown-toggle" data-toggle="dropdown" href="#">
+   <!--{$clientName}-->&nbsp;-&nbsp;<!--{$moduleName}-->
+   <span class="caret"></span>
+   </a>
+   <ul class="dropdown-menu">
+   <li><a href="javascript:show_shortcut('{$uniqu}','{$clientId}','{$moduleId}','{$language['input_shortcut_name']}','{$language['save']}');"><i class="icon-plane"></i>&nbsp;{$language['create_shortcut']}</a></li>
+   <li><a href="javascript:up_multi_panel('{$uniqu}');"><i 
+   class="icon-arrow-up"></i>&nbsp;{$language['up_panel']}</a></li>	
+   <li><a href="javascript:adjust_panel_width('{$uniqu}');"><i 
+   class="icon-resize-horizontal"></i>&nbsp;{$language['adjust_panel_width']}</a></li>	
+   <li><a href="javascript:hide_show_panel('{$uniqu}');"><i 
+   class="icon-eye-close"></i>&nbsp;{$language['hide_show']}</a></li>
+   <li><a href="javascript:switch_group_effects('{$clientId}','{$moduleId}','{$uniqu}');"><i 
+   class="icon-pause"></i>&nbsp;{$language['switch_group_effects']}</a></li>   
+   <li><a href="javascript:sub_effects_group('{$clientId}','{$moduleId}');destroy_mod_panel('{$uniqu}');"><i class="icon-remove"></i>&nbsp;{$language['close']}</a></li>  
+   </ul>
+   </div>
+   <br>

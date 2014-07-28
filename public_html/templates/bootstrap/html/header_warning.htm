@@ -1,0 +1,20 @@
+<!--{if ($lastsuccess)}--><!--{loop $lastsuccess $key $value}-->
+  <div class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Success!</strong> $value.
+  </div>        
+<!--{/loop}--><!--{/if}-->
+
+<!--{if ($lasterror)}--><!--{loop $lasterror $key $value}-->
+  <div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Error!</strong> $value.
+  </div>        
+<!--{/loop}--><!--{/if}-->
+
+<!--{if ($lastwarning)}--><!--{loop $lastwarning $key $value}-->
+  <div class="alert">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Warning!</strong> $value.
+  </div>        
+<!--{/loop}--><!--{/if}-->

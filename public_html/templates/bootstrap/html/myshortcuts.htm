@@ -1,0 +1,129 @@
+<!--{if ($actType)}-->    
+   {subtemplate header_warning}
+   <!--{if (!$lasterror)}-->
+     <b><!--{$ret[1]['alias']}--></b><hr>
+	 <!--{if ($ret[1]['shortcuts'])}-->
+	   <table class="table">	  
+	   <tr><td></td><td>{$language['shortcuts_name']}</td><td>{$language['shortcuts_mode']}</td><td>{$language['shortcuts_version']}</td></tr>
+		 <!--{loop $ret[1]['shortcuts'] $k $v}-->
+		 <tr><td><input type="checkbox" value="{$v['sid']}" name="objs_{$actDiv}"></td><td>{$v['name']}</td><td>{$total_modules['content'][$v['module']]['name']}</td><td>{subtemplate myshortcuts_mid}
+		 </td></tr>
+		 <!--{/loop}-->
+		 </table> 
+		 <p><button class="btn" OnClick="javascript:shortcuts_manage('{$actDiv}','9');">{$language['Copy']}</button> <button class="btn" OnClick="javascript:shortcuts_manage('{$actDiv}','1');">{$language['Paste']}</button> <button class="btn btn-danger" OnClick="javascript:shortcuts_manage('{$actDiv}','2');">{$language['Del']}</button> <button class="btn" OnClick="javascript:shortcuts_manage('{$actDiv}','3');">{$language['MoveUp']}</button></p>
+		 <!--{else}-->
+		   empty
+		   <hr><button class="btn" OnClick="javascript:shortcuts_manage('{$actDiv}','1');">{$language['Paste']}</button>
+	 <!--{/if}-->
+   <!--{/if}-->
+<!--{else}-->
+{subtemplate header}
+{subtemplate header_warning}
+
+<div class="row">
+  <div class="span4 offset1"> 
+
+   <hr>
+{subtemplate mylist}
+	  <b>{$language['shortcuts_manage']}</b>
+	  <input type="hidden" id="copy_buffer" value="">
+	  <hr>
+	      <table class="table">
+		  <thead><tr><td><!--{$language['sc_name']}--></td><td><!--{$language['sc_number']}--></td><td><!--{$language['sc_opt']}--></td></tr></thead>
+          <!--{loop $ret $key $value}-->
+		  <tr><td><!--{$value['alias']}--></td><td>(<!--{$value[shortcuts_num]}-->)</td><td><button onclick="javascript:show_shortcuts_manage('{$key}');"><i class="icon-chevron-right"></i></button></td></tr>
+		  <!--{/loop}-->
+		  </table>
+           
+</div>
+
+<div class="span6 offset1">
+<hr>
+<b><!--{$language['shortcuts_manage_opt']}--></b>
+<hr>
+<div id="shortcutsShow">
+<!--{loop $ret $key $value}-->
+<input type="hidden" id="shortcutsOwnerType_{$key}" value="{$value['type']}">
+<input type="hidden" id="shortcutsOwnerID_{$key}"   value="{$value['id']}">
+<div id="shortcutsManage_{$key}" {if (1 == $key)}style="display:block;"{else}style="display:none;"{/if}>
+<b><!--{$value['alias']}--></b>
+<hr>
+ <!--{if ($value['shortcuts'])}-->
+ <table class="table">
+ <tr><td></td><td>{$language['shortcuts_name']}</td><td>{$language['shortcuts_mode']}</td><td>{$language['shortcuts_version']}</td></tr>
+ <!--{loop $value['shortcuts'] $k $v}-->
+ <tr><td><input type="checkbox" value="{$v['sid']}" name="objs_{$key}"></td><td>{$v['name']}</td><td>{$total_modules['content'][$v['module']]['name']}</td><td>
+ {subtemplate myshortcuts_mid}
+ </td></tr>
+ <!--{/loop}--> 
+ </table> 
+ <p><button class="btn" OnClick="javascript:shortcuts_manage('{$key}','9');">{$language['Copy']}</button> <button class="btn"  OnClick="javascript:shortcuts_manage('{$key}','1');">{$language['Paste']}</button> <button class="btn btn-danger" OnClick="javascript:shortcuts_manage('{$key}','2');">{$language['Del']}</button> <button class="btn" OnClick="javascript:shortcuts_manage('{$key}','3');">{$language['MoveUp']}</button></p>
+ <!--{else}-->
+   empty
+   <hr><button class="btn" OnClick="javascript:shortcuts_manage('{$key}','1');">{$language['Paste']}</button>
+ <!--{/if}-->
+</div>
+<!--{/loop}-->
+</div>
+</div>
+</div>
+<script>
+function set_mod_version(select_id){
+	var obj = document.getElementById("select_"+select_id); //定位id
+	if (obj){
+		var index = obj.selectedIndex; // 选中索引
+		var value = obj.options[index].value; // 选中值
+		params = "sid="+select_id+"&newmid="+value;
+		post_draw("./myshortcuts.php","div_"+select_id,params);		
+	}    
+}
+
+function show_shortcuts_manage(id){
+	var a=document.getElementById("shortcutsShow").getElementsByTagName("div");
+	for(i=0;i<a.length;i++){
+		a[i].style.display = "none";
+	}
+
+	document.getElementById("shortcutsManage_"+id).style.display = "block";
+	
+    a=document.getElementById("shortcutsManage_"+id).getElementsByTagName("div");
+	for(i=0;i<a.length;i++){
+		a[i].style.display = "block";
+	}
+	location.hash = "shortcutsManage_"+id;
+}
+
+function shortcuts_manage(id,act){	
+	var params = "";
+	var objType = document.getElementById("shortcutsOwnerType_"+id).value;
+	var objId   = document.getElementById("shortcutsOwnerID_"+id).value;
+	if (9 == act){	
+		params  = "&srcId="+objId+"&srcType="+objType;
+	}else{
+		params  = "divId="+id+"&type="+objType+"&id="+objId+"&act="+act;
+	}
+	if (1 == act){
+        params += document.getElementById("copy_buffer").value;
+	}else{
+		var obj = document.getElementsByName("objs_"+id);
+		if (obj != null){
+			for(i=0;i<obj.length;i++){
+				if(obj[i].checked){
+					checkedCounter = 1;
+					params += "&sid[]="+encodeURIComponent(obj[i].value);
+				}
+			}
+		}
+	}
+	//alert (params);
+	if (9 == act){
+        document.getElementById("copy_buffer").value = params;
+	}else{
+		post_draw("./myshortcuts.php","shortcutsManage_"+id,params);
+	}
+
+}
+</script>
+<script src="{$tplpath}/js/hyp_request.js"></script>
+{subtemplate footer}
+<!--{/if}-->
