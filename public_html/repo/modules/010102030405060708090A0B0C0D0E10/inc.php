@@ -3,6 +3,8 @@
 $k=unserialize(strtolower(serialize($k)));
 array_multisort($k,SORT_ASC,$d);
 
+$basedir = rawurlencode(htmlspecialchars_decode($basedir));
+
 $basedir_array = array();
 if (isset($d)){
 	foreach ($d as $a => $b){
