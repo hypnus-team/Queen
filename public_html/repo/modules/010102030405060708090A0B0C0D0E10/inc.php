@@ -10,7 +10,7 @@ if (isset($d)){
 	foreach ($d as $a => $b){
 		$tmp=htmlspecialchars_decode($b[5]);
 		$tmp=rawurlencode($tmp);
-		$basedir_array[$a]= 'basedir='.$basedir.'/'.$tmp;
+		$basedir_array[$a]= 'basedir='.$basedir4url.'/'.$tmp;
 	}
 }
 
