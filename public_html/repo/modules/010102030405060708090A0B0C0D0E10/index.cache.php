@@ -1,4 +1,4 @@
-<? if (!class_exists('template')) die('Access Denied');$template->getInstance()->check('index.htm', '1a3d59cfa45656e1fafb86c800a5e845', 1406858780);?>
+<? if (!class_exists('template')) die('Access Denied');$template->getInstance()->check('index.htm', 'c9ddddc3a0399bcb24f538803a2611c2', 1406860904);?>
 <? if($e) { ?>
 <div class="alert alert-error">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -11,7 +11,7 @@
 </div>
 <? } ?>
 
-<input type="text" value="<?=$basedir?>" name="basedir" id="basedir_<?=$UNIQU?>"><input type="button" value="Submit" name="submit" onclick="javascript:basedir=document.getElementById('basedir_<?=$UNIQU?>').value;mod_request('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','basedir='+basedir,0,0);">
+<input type="text" value="<?=$basedir?>" name="basedir" id="basedir_<?=$UNIQU?>"><input type="button" value="Submit" name="submit" onclick="javascript:basedir=encodeURIComponent(document.getElementById('basedir_<?=$UNIQU?>').value);mod_request('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','basedir='+basedir,0,0);">
 <table class="table table-striped table-condensed">
 
 <tr><td><input type="checkbox" onclick="javascript:chkAll_<?=$MID?>(this,'checked_<?=$UNIQU?>');"></td><td></td><td></td><td></td><td></td><td></td><td>
@@ -33,27 +33,27 @@
 <center>
 <div id="New_<?=$UNIQU?>" style="display:none;">
     <strong>Create New</strong>&nbsp;&nbsp;<input type="radio" value="newF" name="opt_<?=$UNIQU?>">File&nbsp;<input type="radio" value="newD" name="opt_<?=$UNIQU?>" checked>Directory<br>
-	<input type="text"  value=""  placeholder="input Name" id="new_input_<?=$UNIQU?>"><br><input class="btn btn-primary" type="submit" value="Submit" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir?>','new','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>');">
+	<input type="text"  value=""  placeholder="input Name" id="new_input_<?=$UNIQU?>"><br><input class="btn btn-primary" type="submit" value="Submit" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir4url?>','new','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>');">
 </div>
 <div id="Delete_<?=$UNIQU?>" style="display:none;">
-    <strong>are you sure to delete ? </strong>&nbsp;<input class="btn btn-danger" type="submit" value="Yes" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir?>','dele','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="No" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
+    <strong>are you sure to delete ? </strong>&nbsp;<input class="btn btn-danger" type="submit" value="Yes" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir4url?>','dele','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="No" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
 </div>
 <div id="Copy_<?=$UNIQU?>" style="display:none;">
     <strong>copy to : </strong>
 	<input type="text"  value=""  placeholder="destination path" id="copy_input_<?=$UNIQU?>"><br>
 	<input type="checkbox" id="copy_box_<?=$UNIQU?>">Overwrite existing files &nbsp;
-	<input class="btn btn-primary" type="submit" value="Copy" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir?>','copy','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
+	<input class="btn btn-primary" type="submit" value="Copy" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir4url?>','copy','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
 </div>
 <div id="Move_<?=$UNIQU?>" style="display:none;">
     <strong>move to : </strong>
 	<input type="text"  value=""  placeholder="destination path" id="move_input_<?=$UNIQU?>"><br>
 	<input type="checkbox" id="move_box_<?=$UNIQU?>">Overwrite existing files &nbsp;
-	<input class="btn btn-primary" type="submit" value="Move" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir?>','move','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
+	<input class="btn btn-primary" type="submit" value="Move" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir4url?>','move','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
 </div>
 <div id="Rename_<?=$UNIQU?>" style="display:none;">
     <strong>new name : </strong>
 	<input type="text"  value=""  placeholder="input new name" id="rename_input_<?=$UNIQU?>"><br>
-	<input class="btn btn-primary" type="submit" value="Rename" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir?>','rename','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
+	<input class="btn btn-primary" type="submit" value="Rename" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir4url?>','rename','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
 </div>
 <div id="Chmod_<?=$UNIQU?>" style="display:none;">    
 	<table border=0>
@@ -63,13 +63,13 @@
 	<tr><td>Read</td><td><input type="checkbox" value=400 name="chmod_input_<?=$UNIQU?>"></td><td><input type="checkbox" value=40 name="chmod_input_<?=$UNIQU?>"></td><td><input type="checkbox" value=4 name="chmod_input_<?=$UNIQU?>"></td></tr>
 	</table>
     <br><input type="checkbox" id="chmod_box_<?=$UNIQU?>">Set Permission Recursively &nbsp;
-	<input class="btn btn-primary" type="submit" value="Chmod" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir?>','chmod','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
+	<input class="btn btn-primary" type="submit" value="Chmod" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir4url?>','chmod','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
 </div>
 <div id="Chown_<?=$UNIQU?>" style="display:none;">
     <strong>new owner : </strong>
 	<input type="text"  value=""  placeholder="new user name" id="chown_input2_<?=$UNIQU?>" class="input-small"> : <input type="text"  value=""  placeholder="new group name" id="chown_input_<?=$UNIQU?>" class="input-small">
 	<br><input type="checkbox" id="chown_box_<?=$UNIQU?>">Change Owner Recursively &nbsp;
-	<input class="btn btn-primary" type="submit" value="Chown" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir?>','chown','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
+	<input class="btn btn-primary" type="submit" value="Chown" onclick="submit_<?=$MID?>('<?=$CID?>','<?=$basedir4url?>','chown','<?=$UNIQU?>');">&nbsp;<input class="btn" type="submit" value="Cancel" onclick="opt_panel_close_<?=$MID?>('<?=$UNIQU?>')">
 </div>
 <div id="Upload_<?=$UNIQU?>" style="display:none;">    
     <strong>Please select a file and click Upload button</strong>
@@ -86,5 +86,5 @@
 </div>
 <div id="Edit_<?=$UNIQU?>" style="display:none;"></div>
 </center>
-<hr><? if(is_array($opt)) { foreach($opt as $key => $value) { ?><input type="button" value="<?=$value?>" name="Opt" onclick="javascript:opt_panel_<?=$MID?>('<?=$value?>','<?=$UNIQU?>');">&nbsp;<? } } ?><input type="button" value="Download" onclick="javascript:download_<?=$MID?>('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','<?=$basedir?>');">
-<input type="button" value="Edit" onclick="javascript:edit_<?=$MID?>('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','<?=$basedir?>');">
+<hr><? if(is_array($opt)) { foreach($opt as $key => $value) { ?><input type="button" value="<?=$value?>" name="Opt" onclick="javascript:opt_panel_<?=$MID?>('<?=$value?>','<?=$UNIQU?>');">&nbsp;<? } } ?><input type="button" value="Download" onclick="javascript:download_<?=$MID?>('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','<?=$basedir4url?>');">
+<input type="button" value="Edit" onclick="javascript:edit_<?=$MID?>('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','<?=$basedir4url?>');">
