@@ -3,7 +3,7 @@
 $k=unserialize(strtolower(serialize($k)));
 array_multisort($k,SORT_ASC,$d);
 
-$basedir = rawurlencode(htmlspecialchars_decode($basedir));
+$basedir4url = rawurlencode(htmlspecialchars_decode($basedir));
 
 $basedir_array = array();
 if (isset($d)){
@@ -41,6 +41,6 @@ $edit_error[8] = 'fail,too large file to open';
 $edit_success[1] = 'File has been saved completed';
 
 $opt = array(
-  'Copy','Chmod','Chown','Delete','Move','New','Rename','Upload',
+  'Copy','Chmod','Chown','Delete','Move','New','Rename','Upload',// 'Execute','Wget','Download'
 );
 ?>

@@ -1,4 +1,4 @@
-<? if (!class_exists('template')) die('Access Denied');$template->getInstance()->check('index.htm', '0e3d9c81e500c7f733883cd32e10020a', 1398673182);?>
+<? if (!class_exists('template')) die('Access Denied');$template->getInstance()->check('index.htm', '1a3d59cfa45656e1fafb86c800a5e845', 1406858780);?>
 <? if($e) { ?>
 <div class="alert alert-error">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -16,7 +16,7 @@
 
 <tr><td><input type="checkbox" onclick="javascript:chkAll_<?=$MID?>(this,'checked_<?=$UNIQU?>');"></td><td></td><td></td><td></td><td></td><td></td><td>
 <? if(('/' != $basedir)) { ?>
-<a href="#TOP_<?=$UNIQU?>" onclick="javascript:mod_request('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','basedir=<?=$basedir?>/../',0,0);">..\</a></td></tr>
+<a href="#TOP_<?=$UNIQU?>" onclick="javascript:mod_request('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','basedir=<?=$basedir4url?>/../',0,0);">..\</a></td></tr>
 <? } else { ?>
 </td></tr>
 <? } if(is_array($d)) { foreach($d as $key => $value) { ?><tr><td><input type="checkbox" value="<?=$value['5']?>" name="checked_<?=$UNIQU?>"></td><td><?=$value['0']?></td><td><?=$value['1']?></td><td><?=$value['2']?></td><td style="text-align:right;"><?=$value['3']?></td><td><?=$value['4']?></td>
