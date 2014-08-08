@@ -141,9 +141,9 @@ function switch_group_effects_do(cid,mid,uniqu,act){
 		if (str.indexOf (";"+cid+";") < 0){
 			document.getElementById("TIPS_"+uniqu).innerHTML = document.getElementById("TIPS_"+uniqu).innerHTML.replace(tip_group_effects,"");
 			add_effects_group(cid,mid);
-			if (document.getElementById("switcher_ban").className.indexOf(" active") >= 0){		
-		        document.getElementById("switcher_ban").className = document.getElementById("switcher_ban").className.replace(/ active/,"");
-			}
+			//if (document.getElementById("switcher_ban").className.indexOf(" active") >= 0){		
+		    //    document.getElementById("switcher_ban").className = document.getElementById("switcher_ban").className.replace(/ active/,"");
+			//}
 		}		
 	}
 }
@@ -214,6 +214,7 @@ function add_effects_group(cid,mid){
 		if (document.getElementById("group_effects_"+mid).innerHTML.indexOf (";"+cid+";") < 0){
 			document.getElementById('group_effects_'+mid).innerHTML += cid+";";
 		}
+ 	    reset_effects_group_span (mid,null);
 	}	
 }
 
@@ -224,7 +225,43 @@ function sub_effects_group(cid,mid){
 			c = c.replace(";"+cid+";",";");
 			document.getElementById('group_effects_'+mid).innerHTML = c;
 		}
+		reset_effects_group_span (mid,cid);
 	}	
+}
+
+function reset_effects_group_span(mid,sub_cid){
+    if (document.getElementById('group_effects_'+mid)){
+        var reg = new RegExp("(<span class=\"badge badge-important\">)(\\d+)</span>","gmi");
+        if (sub_cid){
+			if (document.getElementById("TIPS_"+sub_cid+"_"+mid)){
+				var c = document.getElementById("TIPS_"+sub_cid+"_"+mid).innerHTML;
+				document.getElementById("TIPS_"+sub_cid+"_"+mid).innerHTML =c.replace(reg,"");
+			}					
+		}
+
+		var c_eg_contents = document.getElementById('group_effects_'+mid).innerHTML;
+		var explodeCid = c_eg_contents.split(";");
+		var explodeNum = 0;
+
+		for(i=0; i<explodeCid.length; i++){
+			  if (explodeCid[i] > 0){
+				  explodeNum++;			
+			  }
+		 }
+		 var effectNum = explodeNum - 1;
+		 for(i=0; i<explodeCid.length; i++){
+			  if (explodeCid[i] > 0){
+				  if (document.getElementById("TIPS_"+explodeCid[i]+"_"+mid)){
+					  document.getElementById("TIPS_"+explodeCid[i]+"_"+mid).innerHTML = document.getElementById("TIPS_"+explodeCid[i]+"_"+mid).innerHTML.replace(reg,"");					  
+					  if (effectNum > 0){
+						  document.getElementById("TIPS_"+explodeCid[i]+"_"+mid).innerHTML += '<span class="badge badge-important">'+effectNum+'</span>';			  
+					  }
+				  }
+			  }
+		 }
+
+		 //alert(msg+" No."+explodeNum); 		
+	}
 }
 
 function open_mod_multi(cid,mid){
@@ -235,16 +272,17 @@ function open_mod_multi(cid,mid){
 			return;
 		}		
 	}
+	
 	if (document.getElementById("switcher_show").className.indexOf(" active") >= 0){
 		toolkit_switcher_do("switcher_show",1);
 	}
-	add_effects_group(cid,mid);		
 	create_mod_panel_multi(uniqu);
-	up_multi_panel(uniqu);
-	do_request(cid,mid,null,'',null,uniqu,null,null,null);	
+	add_effects_group(cid,mid);		
+	up_multi_panel(uniqu);	
 	if (document.getElementById("switcher_ban").className.indexOf(" active") >= 0){		
 		switch_group_effects_do(cid,mid,uniqu,1);
 	}
+	do_request(cid,mid,null,'',null,uniqu,null,null,null);
 
 }
 
@@ -270,14 +308,15 @@ function multi_exec_shortcut(sid,cid,mid){
     var uniqu = cid+"_"+mid;
 	if (null != document.getElementById("MOD_"+uniqu)){
 		up_multi_panel(uniqu);
-	}else{
-		if (document.getElementById("switcher_show").className.indexOf(" active") >= 0){
-		    toolkit_switcher_do("switcher_show",1);
-		}
-		add_effects_group(cid,mid);
-		create_mod_panel_multi(uniqu);
-		up_multi_panel(uniqu);		
 	}
+
+	if (document.getElementById("switcher_show").className.indexOf(" active") >= 0){
+		toolkit_switcher_do("switcher_show",1);
+	}
+	create_mod_panel_multi(uniqu);
+	add_effects_group(cid,mid);		
+	up_multi_panel(uniqu);		
+
 	if (document.getElementById("switcher_ban").className.indexOf(" active") >= 0){		
 	    switch_group_effects_do(cid,mid,uniqu,1);
 	}
