@@ -69,6 +69,10 @@ $config_ini_file = './include/config.inc.php';
 	       $lasterror[] = $language['error_eval_invailable'];
 	   }
 
+       if (!function_exists('json_encode')){
+		   $lasterror[] = $language['error_json_encode_invailable'];
+       }
+
 	   if (!function_exists(mb_strlen)){
 	      $lasterror[] = $language['error_mbstring_invailable'];
 	   }

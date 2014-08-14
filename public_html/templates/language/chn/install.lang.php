@@ -35,5 +35,7 @@ $language += array
 
 	 'warning_not_support_posix' => '不支持posix扩展库,建议安装php-posix后再安装,以启动对named pipe的支持,会极大提高系统与客户端响应速度.',
 
+	  'error_json_encode_invailable'   => 'json_encode函数不存在,可能php版本过低或未安装PECL库',
+
 );
 ?>
