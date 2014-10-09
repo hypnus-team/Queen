@@ -127,7 +127,7 @@
 	   if (!$lasterror){
 		   include "$IPC_mod_path".'IPC_'.HYP_IPC_MODE.'.php';
 		   $cid["$clientId".'_'."$moduleId"]['cid'] = $clientId;
-		   $requestStatus = HYP_IPC_task_send();	
+		   $requestStatus = HYP_IPC::task_send();	
 		   $query = 'update '.$mysql_ini['prefix'].'online_task set status = '.$requestStatus.' where tid=\''.$TaskId.'\' and status=-9 limit 1';
 		   if ($db->query($query)){
 			   $requestStatus = 0;			       

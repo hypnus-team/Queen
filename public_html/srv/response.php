@@ -31,7 +31,7 @@ if (!preg_match('/^[a-zA-Z0-9]{32}$/',$tid)){
 			$status = -$status;
 			$query = 'update '.$mysql_ini['prefix'].'online_task set status = '.$status.' where tid=\''.$tid.'\' and status=1 and cid='.$cid.' limit 1';
 			$db->query($query);
-            HYP_IPC_task_response($tid,$cid.':'.$status,':',"");
+            HYP_IPC::task_response($tid,$cid.':'.$status,':',"");
 			
 		}else{
 			$query = 'select chunk,status,size,module from '.$mysql_ini['prefix'].'online_task where tid=\''.$tid.'\' and cid='.$cid.' limit 1' ;

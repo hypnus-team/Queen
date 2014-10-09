@@ -196,7 +196,7 @@ $hexCID = pack("V",$clientId);
 repond_breath (0,$hexCID,false);
 
 include "$IPC_mod_path".'IPC_'.HYP_IPC_MODE.'.php';
-HYP_IPC_KeepAlive();
+HYP_IPC::KeepAlive();
 
 exit;
 

@@ -274,7 +274,7 @@ if (!$lasterror){
 			   
 
 		       include "$IPC_mod_path".'IPC_'.HYP_IPC_MODE.'.php';
-			   $requestStatus = HYP_IPC_task_send();
+			   $requestStatus = HYP_IPC::task_send();
 		       $query = 'update '.$mysql_ini['prefix'].'online_task set status = '.$requestStatus.' where tid=\''.$TaskId.'\' and status=-9 limit '.$remain_drones_num;
 
 			   if (!$db->query($query)){
@@ -286,7 +286,7 @@ if (!$lasterror){
 					       $a = HYP_mysql_recv_block($TaskId,$requestData,$cid,$language);
 						   $dealed = true;
 					   }else{ 
-						   $a = HYP_IPC_task_recv($TaskId,$requestData,$remain_drones_num);
+						   $a = HYP_IPC::task_recv($TaskId,$requestData,$remain_drones_num);
 						   $dealed = false;
 					   }
 					   if (1 == $a){	     
