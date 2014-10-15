@@ -16,7 +16,7 @@ $config_ini_file = './include/config.inc.php';
    define('HYPNUS_ROOT', dirname(__FILE__).'/');  
    define('TPLDIR',HYPNUS_ROOT."./templates/");   
 
-   require './include/global.func.php';
+   require './library/global.func.php';
 
    $language_choosed = 'chn';
    $template_choosed = 'bootstrap';

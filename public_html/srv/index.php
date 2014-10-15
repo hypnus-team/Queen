@@ -1,12 +1,13 @@
 <?php
 
 ini_set('display_errors',0);
+error_reporting(E_ERROR); 
 
 set_time_limit(0);
 ignore_user_abort(true); 
 
 include "../include/config.inc.php";
-include "./include/global.func.php";
+include "../library/global.func.php";
 
 
 
@@ -15,7 +16,7 @@ include "./include/global.func.php";
 
 $c_time = time();
 
-$db = connect_db($mysql_ini);
+$db = GlobalFunc::connect_db($mysql_ini);
 if (!$db){
     repond_breath (3);
 }
@@ -57,7 +58,7 @@ foreach ($tmp as $a){
     if (!preg_match('/^[a-fA-F0-9]{32}$/',$a)){
 	    repond_breath (1);
 	}else{
-	    if (is_sys_module_id($a)){ 
+	    if (GlobalFunc::is_sys_module_id($a)){ 
 			unset ($module[$a]);
 		    continue;
 		}

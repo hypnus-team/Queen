@@ -17,12 +17,12 @@ function mod_install(tid,cid,mid,os,dom){
 		if (document.getElementById(dom)){
 			document.getElementById(dom).innerHTML="<img src=\"./templates/bootstrap/img/loading-mini.gif\">";
 		}
-		var getdata = "nb=1&mid=00010000000000000000000000000000&cid="+cid;	
+		var getdata = "nb=1&mid=00010000000000000000000000000000&cid=0@"+cid;	
 		//var getdata = "mid=00010000000000000000000000000000&cid="+cid;
 		var data = "new_mid="+mid+"&os="+os;
 		//alert (mid+" "+os+" "+cid+" "+dom);
 	}else{
-		var getdata = "nb=1&tid="+tid+"&mid=00010000000000000000000000000000&cid="+cid;	
+		var getdata = "nb=1&tid="+tid+"&mid=00010000000000000000000000000000&cid=0@"+cid;	
 	    var data = "";
 	}
 	$.ajax( {
@@ -130,41 +130,18 @@ function mycheckbox(){
        }else{
 		   post_draw("./app_panel.php","app_panel","cid="+cid);
 	   }
-   }   
-   
-   function create_mod_panel(uniqu){
-	   if (null == document.getElementById("TITLE_"+uniqu)){
-           document.getElementById("mod_top").innerHTML   = "<a name=\"TOP_"+uniqu+"\"></a>";
-		   document.getElementById("mod_panel").innerHTML = "<input type=\"hidden\" value=\"\" id=\"SCC_"+uniqu+"\"><div id=\"MOD_"+uniqu+"\"><div id=\"TID_"+uniqu+"\"></div><hr><div style=\"float: right;\" id=\"STATU_"+uniqu+"\"></div><div id=\"TITLE_"+uniqu+"\"></div><div id=\"WIDGET_"+uniqu+"\"></div><div id=\"CONTENT_"+uniqu+"\"></div></div>";
-	   }else{
-	       //alert("mode_panel already exists,give up create");
-	   }	   
-   }
+   }      
 
-  function destroy_mod_panel(uniqu){
-	    if (null == uniqu) {
+  function destroy_mod_panel(instance){
+	    if (null == instance) {
 			document.getElementById("mod_panel").innerHTML="";
 	    }else{
-			var div = document.getElementById("MOD_"+uniqu);
+			var div = document.getElementById("MOD_"+instance);
 			if (div){
 				div.parentNode.removeChild(div);   //É¾³ý
 			}
+			InstanceRemove(instance);
 		}		
-   }
-
-
-   function exec_shortcut(sid,cid,mid){
-	   if (null == document.getElementById("panel_flag_"+cid)){
-		   document.getElementById("app_panel").innerHTML="";
-		   document.getElementById("client_panel").innerHTML="";
-	   }
-	   create_mod_panel(cid+"_"+mid);
-       do_request(cid,mid,sid,'',null,cid+"_"+mid,null,null,null);
-   }
-   
-   function open_mod(cid,mid){
-	   create_mod_panel(cid+"_"+mid);
-       do_request(cid,mid,null,'',null,cid+"_"+mid,null,null,null);
    }
 
 var JsLoadedObjArray = new Array();

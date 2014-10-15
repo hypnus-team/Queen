@@ -28,7 +28,7 @@
    }elseif (!$shortcut_name){
 	   $lasterror[] = $language['illegal_shortcut_name'];
    }else{
-	   $db = connect_db($mysql_ini);
+	   $db = GlobalFunc::connect_db($mysql_ini);
 	   if (!$db){
 		   $lasterror[] = $language['fail_db'];
 	   }else{
@@ -44,7 +44,7 @@
 		   }
 		   
 		   if (!$lasterror){
-			   $dummy = get_dummy_from_cid($uid,$cid,$db,$mysql_ini);
+			   $dummy = GlobalFunc::get_dummy_from_cid($uid,$cid,$db,$mysql_ini);
 			   if (false === $dummy){
 				   $lasterror[] = $language['client_off_line'];			   
 			   }	

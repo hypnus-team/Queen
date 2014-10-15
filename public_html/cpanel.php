@@ -19,7 +19,7 @@ if ('group_panel' === $_POST['act']){
 }
 
 if (('clients_list' === $_POST['act']) or ('client_panel' === $_POST['act']) or ('group_list' === $_POST['act'])){
-   $db = connect_db($mysql_ini);
+   $db = GlobalFunc::connect_db($mysql_ini);
    if (!$db){
 	   $lasterror[] = $language['fail_db'];
    }
@@ -34,7 +34,7 @@ if (('clients_list' === $_POST['act']) or ('client_panel' === $_POST['act']) or 
            $new_alias  = $_POST['new_alias'];
 		   if ($clientId){
 			   if ($new_alias){
-				   $dummy_id = get_dummy_from_cid($uid,$clientId,$db,$mysql_ini);
+				   $dummy_id = GlobalFunc::get_dummy_from_cid($uid,$clientId,$db,$mysql_ini);
 				   if ($dummy_id){
 				       $query = 'update '.$mysql_ini['prefix'].'dummy set alias=? where dummy='.$dummy_id.' limit 1';
                        $stmt = $db->prepare($query);			

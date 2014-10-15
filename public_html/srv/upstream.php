@@ -3,7 +3,7 @@
 ini_set('display_errors',0);
 
 include "../include/config.inc.php";
-include "./include/global.func.php";
+include "../library/global.func.php";
 
 $tid = $_REQUEST['tid'];
 $tNo = intval($_REQUEST['tno']);
@@ -18,7 +18,7 @@ if (preg_match('/^[a-fA-F0-9]{32}$/',$mid)){
 
 }elseif (preg_match('/^[a-zA-Z0-9]{32}$/',$tid)){
 	
-	$c_stream_file = get_stream_path($tid,false);
+	$c_stream_file = GlobalFunc::get_stream_path($tid,false);
 
 	$c_stream_file .= "$tid".'.UP.'."$tNo";
 }

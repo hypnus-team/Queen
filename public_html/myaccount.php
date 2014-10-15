@@ -11,7 +11,7 @@
 
 	$account_act = intval($_GET['a']);
 	
-	$db = connect_db($mysql_ini);		
+	$db = GlobalFunc::connect_db($mysql_ini);		
 	if ($db===FALSE){
 		$lasterror[] =  $language['fail_db'];
 	}else{
@@ -169,7 +169,7 @@
 		   }
 		   if ($new_comment){
 		       if ($max_token > 0){
-			       $new_token = random(32);
+			       $new_token = GlobalFunc::random(32);
 				   $query = "insert into ".$mysql_ini['prefix']."token values (NULL,?,?,0)";
 				   $stmt = $db->prepare($query);			
 				   $stmt->bind_param("ss",$new_token,$new_comment);

@@ -27,10 +27,10 @@
 	 }
    }
 
-   function show_shortcut(uniqu,cid,mid,placeholder,save){
-	   var hd = document.getElementById("WIDGET_"+uniqu);	   
+   function show_shortcut(instance,cid,mid,placeholder,save){
+	   var hd = document.getElementById("WIDGET_"+instance);	   
 	   if (hd){
-		   var contents = "<input id=\"shortcut_name\" type=\"text\" value=\"\" placeholder=\""+placeholder+"\">&nbsp;<a href=\"javascript:save_as_shortcut('"+uniqu+"','"+cid+"','"+mid+"');\">"+save+"</a><a href=\"./readme.php?article=45\" target=\"_blank\"><i class=\"icon-question-sign\"></i></a>";	   
+		   var contents = "<input id=\"shortcut_name\" type=\"text\" value=\"\" placeholder=\""+placeholder+"\">&nbsp;<a href=\"javascript:save_as_shortcut('"+instance+"','"+cid+"','"+mid+"');\">"+save+"</a><a href=\"./readme.php?article=45\" target=\"_blank\"><i class=\"icon-question-sign\"></i></a>";	   
 		   if (hd.innerHTML == contents){
 		       hd.innerHTML = "";
 		   }else{
@@ -39,26 +39,26 @@
 	   }      
    }
 
-   function save_as_shortcut(uniqu,cid,mid){ 
-	   var hd = document.getElementById("SCC_"+uniqu);
+   function save_as_shortcut(instance,cid,mid){ 
+	   var hd = document.getElementById("SCC_"+instance);
 	   if (hd){
 		   var shortcut_name = document.getElementById("shortcut_name").value;		      
-	       var scc = document.getElementById("SCC_"+uniqu).value;
-		   post_draw("./shortcut.php?name="+shortcut_name+"&cid="+cid+"&mid="+mid,"WIDGET_"+uniqu,scc);   
+	       var scc = document.getElementById("SCC_"+instance).value;
+		   post_draw("./shortcut.php?name="+shortcut_name+"&cid="+cid+"&mid="+mid,"WIDGET_"+instance,scc);   
 	   }
    }
 
-   function mod_request(cid,mid,uniqu,data,callback,callback_params){
-       do_request(cid,mid,null,data,null,uniqu,callback,callback_params,null);
+   function mod_request(cid,mid,instance,data,callback,callback_params){
+       do_request(cid,mid,null,data,null,instance,callback,callback_params,null);
    }
 
-   function mod_request_sentinel(tid,cid,mid,uniqu){
-	   document.getElementById("TID_"+uniqu).innerHTML = "<a id=\"Tid_"+tid+"\"></a>";	   
-	   do_request(cid,mid,null,null,tid,uniqu,null,null,null);
+   function mod_request_sentinel(tid,cid,mid,instance){
+	   document.getElementById("TID_"+instance).innerHTML = "<a id=\"Tid_"+tid+"\"></a>";
+	   do_request(cid,mid,null,null,tid,cid,null,null,null);
    }
 
                          
-   function do_request(cid,mid,sid,data,tid,uniqu,callback,callback_params,remain_unit){
+   function do_request(cid,mid,sid,data,tid,instance,callback,callback_params,remain_unit){	  
 	 try{
 	   if (!tid){          
 		  var ShortCutsContents = "";
@@ -69,33 +69,36 @@
 		      getdata = "sid="+sid;
 			  ShortCutsContents = "sid:"+sid;
 		  }
-         
-          //check group effects 
-		  cid = get_effect_clients(cid,mid);
-
-		  getdata += "&cid="+cid
-
-		  if (document.getElementById("TITLE_"+uniqu).innerHTML == ""){
+          	  
+		  if (document.getElementById("TITLE_"+instance).innerHTML == ""){
               getdata += "&reqtitle=1";			  
-		  }
+		  }		  
+          //check group effects 		  
+		  
+		  var cid = get_effect_clients(instance,mid);
+		  var explodeInstance = cid.split(";");
 
-		  var explodeCid = cid.split(";");
-		  for(i=0; i<explodeCid.length; i++){
-			  if (explodeCid[i] > 0){
-				  document.getElementById("STATU_"+explodeCid[i]+"_"+mid).innerHTML="<img src=\"./templates/bootstrap/img/loading-mini.gif\">";		  
-				  document.getElementById("WIDGET_"+explodeCid[i]+"_"+mid).innerHTML="";
-				  if (!callback){
-					  document.getElementById("SCC_"+explodeCid[i]+"_"+mid).value=ShortCutsContents;
+		  for(i=0; i<explodeInstance.length; i++){
+			  var tmp = explodeInstance[i].split("@",2);
+			  if (tmp[0] > 0){		
+				  if (document.getElementById("STATU_"+tmp[0])){
+					  document.getElementById("STATU_"+tmp[0]).innerHTML="<img src=\"./templates/bootstrap/img/loading-mini.gif\">";		  
+					  document.getElementById("WIDGET_"+tmp[0]).innerHTML="";
+					  if (!callback){
+						  document.getElementById("SCC_"+tmp[0]).value=ShortCutsContents;
+					  }					  
 				  }
 			  }
 		  }
+
+		  getdata += "&cid="+cid
 
 	   }else{
           if (null == document.getElementById("Tid_"+tid)){	
 			  //alert ("Tid_"+tid+" is null,exit");
 			  return;
           }
-	      getdata = "tid="+tid+"&cid="+cid+"&mid="+mid;
+	      getdata = "tid="+tid+"&cid="+instance+"&mid="+mid;
 	   }
 
 	   if ("block" == document.getElementById("multiPanel").style.display){
@@ -111,26 +114,27 @@
 		   },
 		   error : function(result){
 			   try{                 
-				 document.getElementById("STATU_"+uniqu).innerHTML='fail to connect srv';
+				 document.getElementById("STATU_"+instance).innerHTML='fail to connect srv';
 			   }catch(e){
 			     alert("js runtime fail(func do_request.error): "+e.description);
 			   }
 		   }
 
-	   });	  
+	   });	
 	 }catch(e){
 	     alert("js runtime fail(func do_request): "+e.description);
 	 }
    }
 
-function get_effect_clients(cid,mid){
+function get_effect_clients(instance,mid){	
+	instance = ";"+InstanceToCid(instance)+";";
 	if (document.getElementById('group_effects_'+mid)){
 		var c = document.getElementById('group_effects_'+mid).innerHTML;
-		if (c.indexOf (";"+cid+";") >= 0){
-			cid = document.getElementById('group_effects_'+mid).innerHTML;
+		if (c.indexOf (instance) >= 0){
+			instance = document.getElementById('group_effects_'+mid).innerHTML;
 		}
 	}
-	return cid;
+	return instance;
 }
 
 function show_do_request(result,tid,mid,callback,callback_params){
@@ -152,13 +156,14 @@ function show_do_request(result,tid,mid,callback,callback_params){
 			 if (c_response.uniqu){
 				 c_uniqu = c_response.uniqu;
 			 }
-			 
+			 if (!InstanceCheck(c_uniqu,c_response.cid,mid)){ // 识别 instance 仍然有效且未被更改
+				 continue;
+			 }
 			 if (document.getElementById("STATU_"+c_uniqu)){					 					
 				 if (c_response.keepRequest){
 					 document.getElementById("STATU_"+c_uniqu).innerHTML="<img src=\"./templates/bootstrap/img/loading-mini.gif\">";
-					 remain_cid += c_response.cid+";";
+					 remain_cid += c_uniqu+"@"+c_response.cid+";";
 					 keepAlive = true;
-					 mid = c_response.mid;
 					 c_tid = c_response.tid;
 				 }else{
 					 if (c_response.fail){
@@ -194,7 +199,7 @@ function show_do_request(result,tid,mid,callback,callback_params){
 			 }
 		 }
 		 if (keepAlive == true){
-			 timeId = setTimeout(function(){do_request(remain_cid,mid,null,null,c_tid,c_uniqu,callback,callback_params,null);},1);
+			 timeId = setTimeout(function(){do_request(remain_cid,mid,null,null,c_tid,remain_cid,callback,callback_params,null);},1);
 			 //timeId = setTimeout(function(){do_request(cid,mid,sid,null,response.tid,c_uniqu,callback,callback_params,remain_unit);},1);
 		 }
 	 }else{

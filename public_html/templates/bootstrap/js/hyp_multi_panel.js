@@ -64,25 +64,25 @@ function toolkit_switcher_do(name,status){
 			multi_group_list_load(status);			
 	        break;
         case "switcher_show":
-			var uniqu = "";
 			var a=document.getElementById("multi_app_container").getElementsByTagName("div");
 		    for(i=0;i<a.length;i++){
 				var flag = a[i].id.substring(0,4);
 				if ("MOD_" == flag){
-                    var uniqu = a[i].id.substring(4);
-					hide_show_panel_do(uniqu,status);
+					hide_show_panel_do(a[i].id.substring(4),status);
 				}
 			}			
 			break;
         case "switcher_ban":
-			var uniqu = "";
 			var a=document.getElementById("multi_app_container").getElementsByTagName("div");
 		    for(i=0;i<a.length;i++){
 				var flag = a[i].id.substring(0,4);
 				if ("MOD_" == flag){
-                    var uniqu = a[i].id.substring(4);
-					var tmp = uniqu.split("_",2);
-					switch_group_effects_do(tmp[0],tmp[1],uniqu,status);
+					var instance = a[i].id.substring(4);
+                    var uniqu = InstanceRead(instance);
+					if (null != uniqu){
+						var tmp = uniqu.split("_",2);
+						switch_group_effects_do(tmp[0],tmp[1],instance,status);					
+					}
 				}
 			}			
 			break;
@@ -91,56 +91,56 @@ function toolkit_switcher_do(name,status){
 }
 
 
-function hide_show_panel_do(uniqu,act){
-	var n = document.getElementById("CONTENT_"+uniqu);
+function hide_show_panel_do(instance,act){
+	var n = document.getElementById("CONTENT_"+instance);
 	if (n){	
-		var tip_hidden = "<a href=\"javascript:hide_show_panel('"+uniqu+"');\"><i class=\"icon-eye-close\" title=\"show\"></i></a>";
+		var tip_hidden = "<a href=\"javascript:hide_show_panel('"+instance+"');\"><i class=\"icon-eye-close\" title=\"show\"></i></a>";
 		if (act){
 			if ("none" != n.style.display){
 		        n.style.display = "none";
-				document.getElementById("TIPS_"+uniqu).innerHTML += tip_hidden;
-				document.getElementById("MOD_"+uniqu).className = "span3";
+				document.getElementById("TIPS_"+instance).innerHTML += tip_hidden;
+				document.getElementById("MOD_"+instance).className = "span3";
 			}
 		}else{
 			if ("none" == n.style.display){
 				n.style.display = "block";
-				var str = document.getElementById("TIPS_"+uniqu).innerHTML;
-				document.getElementById("TIPS_"+uniqu).innerHTML = str.replace(tip_hidden,"");
-				var width = document.getElementById("WIDTH_"+uniqu).value;
-				do_adjust_panel_width(uniqu,width);			
+				var str = document.getElementById("TIPS_"+instance).innerHTML;
+				document.getElementById("TIPS_"+instance).innerHTML = str.replace(tip_hidden,"");
+				var width = document.getElementById("WIDTH_"+instance).value;
+				do_adjust_panel_width(instance,width);			
 			}
 		}
 	}
 }
 
-function hide_show_panel(uniqu){
-    var n = document.getElementById("CONTENT_"+uniqu);
+function hide_show_panel(instance){
+    var n = document.getElementById("CONTENT_"+instance);
 	if (n){		
         if ("none" == n.style.display){			
 			if (document.getElementById("switcher_show").className.indexOf(" active") >= 0){
 			    toolkit_switcher_do("switcher_show",1);
 			}
-			hide_show_panel_do(uniqu,0);
+			hide_show_panel_do(instance,0);
         }else{
-			hide_show_panel_do(uniqu,1);		    
+			hide_show_panel_do(instance,1);		    
 		}
 	}
 }
 
-function switch_group_effects_do(cid,mid,uniqu,act){
-    var tip_group_effects = "<a href=\"javascript:switch_group_effects('"+cid+"','"+mid+"','"+uniqu+"');\"><i class=\"icon-pause\" title=\"on\"></i></a>";
+function switch_group_effects_do(cid,mid,instance,act){
+    var tip_group_effects = "<a href=\"javascript:switch_group_effects('"+cid+"','"+mid+"','"+instance+"');\"><i class=\"icon-pause\" title=\"on\"></i></a>";
     var str = document.getElementById("group_effects_"+mid).innerHTML;
 	if (act){
-		if (str.indexOf (";"+cid+";") >= 0){
-			if (document.getElementById("TIPS_"+uniqu).innerHTML.indexOf(tip_group_effects) < 0){
-				document.getElementById("TIPS_"+uniqu).innerHTML += tip_group_effects;
+		if (str.indexOf (";"+instance+"@"+cid+";") >= 0){
+			if (document.getElementById("TIPS_"+instance).innerHTML.indexOf(tip_group_effects) < 0){
+				document.getElementById("TIPS_"+instance).innerHTML += tip_group_effects;
 			}
-			sub_effects_group(cid,mid);	
+			sub_effects_group(cid,instance,mid);	
 		}
 	}else{
-		if (str.indexOf (";"+cid+";") < 0){
-			document.getElementById("TIPS_"+uniqu).innerHTML = document.getElementById("TIPS_"+uniqu).innerHTML.replace(tip_group_effects,"");
-			add_effects_group(cid,mid);
+		if (str.indexOf (";"+instance+"@"+cid+";") < 0){
+			document.getElementById("TIPS_"+instance).innerHTML = document.getElementById("TIPS_"+instance).innerHTML.replace(tip_group_effects,"");
+			add_effects_group(cid,instance,mid);
 			//if (document.getElementById("switcher_ban").className.indexOf(" active") >= 0){		
 		    //    document.getElementById("switcher_ban").className = document.getElementById("switcher_ban").className.replace(/ active/,"");
 			//}
@@ -148,55 +148,55 @@ function switch_group_effects_do(cid,mid,uniqu,act){
 	}
 }
 
-function switch_group_effects(cid,mid,uniqu){
+function switch_group_effects(cid,mid,instance){
     var n = document.getElementById("group_effects_"+mid);
 	if (n){		
 		var str = document.getElementById("group_effects_"+mid).innerHTML;
-		if (str.indexOf (";"+cid+";") >= 0){
-			switch_group_effects_do(cid,mid,uniqu,1);
+		if (str.indexOf (";"+instance+"@"+cid+";") >= 0){
+			switch_group_effects_do(cid,mid,instance,1);
 		}else{
-			switch_group_effects_do(cid,mid,uniqu,0);
+			switch_group_effects_do(cid,mid,instance,0);
         }
 	}
 }
 
 
-function do_adjust_panel_width(uniqu,width){
+function do_adjust_panel_width(instance,width){
 	if (!width){
-		document.getElementById('WIDGET_'+uniqu).innerHTML = "";
+		document.getElementById('WIDGET_'+instance).innerHTML = "";
 	}else{
-		document.getElementById('MOD_'+uniqu).className = "span"+width+" offset1";
-		document.getElementById('WIDTH_'+uniqu).value   = width;
+		document.getElementById('MOD_'+instance).className = "span"+width+" offset1";
+		document.getElementById('WIDTH_'+instance).value   = width;
 	}
 }
 
-function adjust_panel_width(uniqu){	
-    document.getElementById("WIDGET_"+uniqu).innerHTML = " \
+function adjust_panel_width(instance){	
+    document.getElementById("WIDGET_"+instance).innerHTML = " \
 		<div class=\"btn-toolbar\" style=\"margin: 0;\">\
 		<div class=\"btn-group\">\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',0);\" class=\"btn\"><i class=\"icon-remove\"></i></button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',2);\" class=\"btn\">2</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',3);\" class=\"btn\">3</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',4);\" class=\"btn\">4</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',5);\" class=\"btn\">5</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',6);\" class=\"btn\">6</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',7);\" class=\"btn\">7</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',8);\" class=\"btn\">8</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',9);\" class=\"btn\">9</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',10);\" class=\"btn\">10</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',11);\" class=\"btn\">11</button>\
-		<button onclick=\"do_adjust_panel_width('"+uniqu+"',12);\" class=\"btn\">12</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',0);\" class=\"btn\"><i class=\"icon-remove\"></i></button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',2);\" class=\"btn\">2</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',3);\" class=\"btn\">3</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',4);\" class=\"btn\">4</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',5);\" class=\"btn\">5</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',6);\" class=\"btn\">6</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',7);\" class=\"btn\">7</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',8);\" class=\"btn\">8</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',9);\" class=\"btn\">9</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',10);\" class=\"btn\">10</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',11);\" class=\"btn\">11</button>\
+		<button onclick=\"do_adjust_panel_width('"+instance+"',12);\" class=\"btn\">12</button>\
 	  </div>\
     </div>";
 }
 
-function up_multi_panel(uniqu){	
-	var el = document.getElementById("MOD_"+uniqu);
+function up_multi_panel(instance){	
+	var el = document.getElementById("MOD_"+instance);
     var t_el = $(el).clone(true);
 	$("#multi_app_container").children(":first").before(t_el);
 	$(el).remove();
-	location.hash = "MOD_"+uniqu;
-    document.getElementById("TOP_MOD").value = uniqu;
+	location.hash = "MOD_"+instance;
+    document.getElementById("TOP_MOD").value = instance;
 }
 
 function show_multi_panel(cid){
@@ -206,36 +206,36 @@ function show_multi_panel(cid){
 	post_draw("./app_panel.php","multi_app_panel","multi=1&cid="+cid);
 }
 
-function add_effects_group(cid,mid){
-	if (document.getElementById('group_effects')){	
+function add_effects_group(cid,instance,mid){
+	if (document.getElementById('group_effects')){
 	    if (null == document.getElementById('group_effects_'+mid)){
 		    document.getElementById('group_effects').innerHTML += "<div id=\"group_effects_"+mid+"\">;</div>";			
 		}		
-		if (document.getElementById("group_effects_"+mid).innerHTML.indexOf (";"+cid+";") < 0){
-			document.getElementById('group_effects_'+mid).innerHTML += cid+";";
+		if (document.getElementById("group_effects_"+mid).innerHTML.indexOf (";"+instance+"@"+cid+";") < 0){
+			document.getElementById('group_effects_'+mid).innerHTML += instance+"@"+cid+";";
 		}
  	    reset_effects_group_span (mid,null);
 	}	
 }
 
-function sub_effects_group(cid,mid){
+function sub_effects_group(cid,instance,mid){
     if (document.getElementById('group_effects')){	
 	    if (document.getElementById('group_effects_'+mid)){
 		    var c = document.getElementById('group_effects_'+mid).innerHTML;
-			c = c.replace(";"+cid+";",";");
+			c = c.replace(";"+instance+"@"+cid+";",";");
 			document.getElementById('group_effects_'+mid).innerHTML = c;
 		}
-		reset_effects_group_span (mid,cid);
+		reset_effects_group_span (mid,instance);
 	}	
 }
 
-function reset_effects_group_span(mid,sub_cid){
+function reset_effects_group_span(mid,instance){
     if (document.getElementById('group_effects_'+mid)){
         var reg = new RegExp("(<span class=\"badge badge-important\">)(\\d+)</span>","gmi");
-        if (sub_cid){
-			if (document.getElementById("TIPS_"+sub_cid+"_"+mid)){
-				var c = document.getElementById("TIPS_"+sub_cid+"_"+mid).innerHTML;
-				document.getElementById("TIPS_"+sub_cid+"_"+mid).innerHTML =c.replace(reg,"");
+        if (instance){
+			if (document.getElementById("TIPS_"+instance)){
+				var c = document.getElementById("TIPS_"+instance).innerHTML;
+				document.getElementById("TIPS_"+instance).innerHTML =c.replace(reg,"");
 			}					
 		}
 
@@ -244,17 +244,19 @@ function reset_effects_group_span(mid,sub_cid){
 		var explodeNum = 0;
 
 		for(i=0; i<explodeCid.length; i++){
-			  if (explodeCid[i] > 0){
+			  var tmp = explodeCid[i].split("@",2);
+			  if (tmp[0] > 0){
 				  explodeNum++;			
 			  }
 		 }
 		 var effectNum = explodeNum - 1;
 		 for(i=0; i<explodeCid.length; i++){
-			  if (explodeCid[i] > 0){
-				  if (document.getElementById("TIPS_"+explodeCid[i]+"_"+mid)){
-					  document.getElementById("TIPS_"+explodeCid[i]+"_"+mid).innerHTML = document.getElementById("TIPS_"+explodeCid[i]+"_"+mid).innerHTML.replace(reg,"");					  
+			  var tmp = explodeCid[i].split("@",2);
+			  if (tmp[0] > 0){
+				  if (document.getElementById("TIPS_"+tmp[0])){
+					  document.getElementById("TIPS_"+tmp[0]).innerHTML = document.getElementById("TIPS_"+tmp[0]).innerHTML.replace(reg,"");					  
 					  if (effectNum > 0){
-						  document.getElementById("TIPS_"+explodeCid[i]+"_"+mid).innerHTML += '<span class="badge badge-important">'+effectNum+'</span>';			  
+						  document.getElementById("TIPS_"+tmp[0]).innerHTML += '<span class="badge badge-important">'+effectNum+'</span>';			  
 					  }
 				  }
 			  }
@@ -265,10 +267,17 @@ function reset_effects_group_span(mid,sub_cid){
 }
 
 function open_mod_multi(cid,mid){
-    var uniqu = cid+"_"+mid;
-	if (null != document.getElementById("MOD_"+uniqu)){
-        if (uniqu != document.getElementById("TOP_MOD").value){
-		    up_multi_panel(uniqu);
+    //根据按钮 是否总是新建 实例 
+	if (document.getElementById("switcher_instance").className.indexOf(" active") >= 0){
+		toolkit_switcher('switcher_instance',0);
+	    var instance = InstanceGet(cid+"_"+mid,true);
+	}else{
+		var instance = InstanceGet(cid+"_"+mid,false);	
+	}
+
+	if (null != document.getElementById("MOD_"+instance)){
+        if (instance != document.getElementById("TOP_MOD").value){
+		    up_multi_panel(instance);
 			return;
 		}		
 	}
@@ -276,28 +285,28 @@ function open_mod_multi(cid,mid){
 	if (document.getElementById("switcher_show").className.indexOf(" active") >= 0){
 		toolkit_switcher_do("switcher_show",1);
 	}
-	create_mod_panel_multi(uniqu);
-	add_effects_group(cid,mid);		
-	up_multi_panel(uniqu);	
+	create_mod_panel_multi(instance);
+	add_effects_group(cid,instance,mid);		
+	up_multi_panel(instance);	
 	if (document.getElementById("switcher_ban").className.indexOf(" active") >= 0){		
-		switch_group_effects_do(cid,mid,uniqu,1);
+		switch_group_effects_do(cid,mid,instance,1);
 	}
-	do_request(cid,mid,null,'',null,uniqu,null,null,null);
+	do_request(cid,mid,null,'',null,instance,null,null,null);
 
 }
 
-function create_mod_panel_multi(uniqu){
-    if (null == document.getElementById("TITLE_"+uniqu)){
-		document.getElementById("multi_app_container").innerHTML += "<div class=\"span5 offset1\" id=\"MOD_"+uniqu+"\">\
-                                                                	 <input type=\"hidden\" value=\"5\" id=\"WIDTH_"+uniqu+"\">\
-                                                                	 <input type=\"hidden\" value=\"\" id=\"SCC_"+uniqu+"\">\
-		                                                             <a name=\"TOP_"+uniqu+"\"></a>\
-		                                                             <div id=\"TID_"+uniqu+"\"></div>\
-		                                                             <hr><div style=\"float: right;\" id=\"STATU_"+uniqu+"\"></div>\
-																		 <div style=\"float: left;position: relative;z-index: 10;\" id=\"TIPS_"+uniqu+"\"></div>\
-																		 <div id=\"TITLE_"+uniqu+"\"></div>\
-																		 <div id=\"WIDGET_"+uniqu+"\"></div>\
-																		 <div id=\"CONTENT_"+uniqu+"\"></div></div>";
+function create_mod_panel_multi(instance){
+    if (null == document.getElementById("TITLE_"+instance)){
+		document.getElementById("multi_app_container").innerHTML += "<div class=\"span5 offset1\" id=\"MOD_"+instance+"\">\
+                                                                	 <input type=\"hidden\" value=\"5\" id=\"WIDTH_"+instance+"\">\
+                                                                	 <input type=\"hidden\" value=\"\" id=\"SCC_"+instance+"\">\
+		                                                             <a name=\"TOP_"+instance+"\"></a>\
+		                                                             <div id=\"TID_"+instance+"\"></div>\
+		                                                             <hr><div style=\"float: right;\" id=\"STATU_"+instance+"\"></div>\
+																		 <div style=\"float: left;position: relative;z-index: 10;\" id=\"TIPS_"+instance+"\"></div>\
+																		 <div id=\"TITLE_"+instance+"\"></div>\
+																		 <div id=\"WIDGET_"+instance+"\"></div>\
+																		 <div id=\"CONTENT_"+instance+"\"></div></div>";
 	}else{
 		//alert("mode_panel_multi already exists,give up create");
 	}	   
@@ -305,22 +314,28 @@ function create_mod_panel_multi(uniqu){
 
 
 function multi_exec_shortcut(sid,cid,mid){
-    var uniqu = cid+"_"+mid;
-	if (null != document.getElementById("MOD_"+uniqu)){
-		up_multi_panel(uniqu);
+    //根据按钮 是否总是新建 实例 
+	if (document.getElementById("switcher_instance").className.indexOf(" active") >= 0){
+		toolkit_switcher('switcher_instance',0);
+	    var instance = InstanceGet(cid+"_"+mid,true);
+	}else{
+		var instance = InstanceGet(cid+"_"+mid,false);	
+	}
+	if (null != document.getElementById("MOD_"+instance)){
+		up_multi_panel(instance);
 	}
 
 	if (document.getElementById("switcher_show").className.indexOf(" active") >= 0){
 		toolkit_switcher_do("switcher_show",1);
 	}
-	create_mod_panel_multi(uniqu);
-	add_effects_group(cid,mid);		
-	up_multi_panel(uniqu);		
+	create_mod_panel_multi(instance);
+	add_effects_group(cid,instance,mid);		
+	up_multi_panel(instance);		
 
 	if (document.getElementById("switcher_ban").className.indexOf(" active") >= 0){		
-	    switch_group_effects_do(cid,mid,uniqu,1);
+	    switch_group_effects_do(cid,mid,instance,1);
 	}
-    do_request(cid,mid,sid,'',null,cid+"_"+mid,null,null,null);
+    do_request(cid,mid,sid,'',null,instance,null,null,null);
 }
 
 function destroy_simple_panel(){

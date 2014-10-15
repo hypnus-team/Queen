@@ -233,7 +233,7 @@ function ajaxFileUpload_{$MID}(cid,uniqu,basedir){
     
 	document.getElementById("Upload_Status_"+uniqu).innerHTML="<strong>uploading to server ...</strong>";
     
-	cid = get_effect_clients(cid,'{$MID}');
+	cid = get_effect_clients(uniqu,'{$MID}');
    
 	$.ajaxFileUpload_{$MID}
 	(

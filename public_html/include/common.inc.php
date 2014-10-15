@@ -1,6 +1,7 @@
 <?php   
 
 ini_set('display_errors',0);
+error_reporting(E_ERROR); 
 
 $lasterror   = false;
 $lastsuccess = false;
@@ -11,7 +12,7 @@ $lastwarning = false;
    define('TPLDIR',HYPNUS_ROOT."./templates/");   
 
    require "./include/config.inc.php";
-   require './include/global.func.php';
+   require './library/global.func.php';
 
    $language_choosed = 'chn';
    $template_choosed = 'bootstrap';

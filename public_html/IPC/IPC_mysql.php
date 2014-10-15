@@ -30,7 +30,7 @@ class HYP_IPC{
 		while (true){
 			usleep($srv_block_ini['sleep'] * 1000000);    
 			
-			$db = connect_db($mysql_ini);
+			$db = GlobalFunc::connect_db($mysql_ini);
 			if ($db){
 				$c_status = connection_status();
 				if (($active_offline) or ($c_status!=0)){ //client offline
@@ -109,7 +109,7 @@ class HYP_IPC{
 						 $query = "update ".$mysql_ini['prefix']."online_clients set lastliving = $db_timer where cid=$clientId and status = 1 limit 1";
 						 $db->query($query);
 						 if (1 != $db->affected_rows){
-							 errorlog('db.living update 失败,疑似Drone主动下线...',2);
+							 GlobalFunc::errorlog('db.living update 失败,疑似Drone主动下线...',2);
 							 $active_offline = true;
 						 }
 					}

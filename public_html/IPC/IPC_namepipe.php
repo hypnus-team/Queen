@@ -94,7 +94,7 @@ class HYP_IPC{
 					self::namepipe_data_parser($tmp_contents,$requestData);			
 				}
 				if (strlen($tmp_contents)){
-					errorlog('HYP_IPC_task_recv not complete : '.$tmp_contents);	
+					GlobalFunc::errorlog('HYP_IPC_task_recv not complete : '.$tmp_contents);	
 				}
 				
 				fclose($pipe);
@@ -103,12 +103,7 @@ class HYP_IPC{
 		return $ret;
 	}
 
-	public static function task_send(){
-
-		global $TaskId;
-		global $cid;
-		global $moduleId;
-		global $data;
+	public static function task_send($TaskId,$cid,$moduleId,$data){
 
 		global $language;
 
@@ -168,7 +163,7 @@ class HYP_IPC{
 		$success = posix_mkfifo($fifo_file, 0700);
 
 		if (!$success){
-			errorlog('Error: Could not create a named pipe: '.posix_strerror(posix_errno()));		
+			GlobalFunc::errorlog('Error: Could not create a named pipe: '.posix_strerror(posix_errno()));		
 		}else{
 			$pipe = @fopen($fifo_file, 'r+b');
 			if ($pipe){
@@ -203,7 +198,7 @@ class HYP_IPC{
 					}	
 					if (($active_offline) or ((!$off_line) and (0 != connection_status()))){
 						$off_line = true;
-						$db = connect_db($mysql_ini);
+						$db = GlobalFunc::connect_db($mysql_ini);
 						if ($db){				
 							$query = 'delete from '.$mysql_ini['prefix']."online_mac where cid=$clientId limit $mac_num";
 							$db->query($query);			
@@ -217,12 +212,12 @@ class HYP_IPC{
 						$c_time = time();
 						if (($c_time - $db_timer) > $srv_block_ini['db_living']){
 							$db_timer = $c_time;
-							$db = connect_db($mysql_ini);
+							$db = GlobalFunc::connect_db($mysql_ini);
 							if ($db){
 								$query = "update ".$mysql_ini['prefix']."online_clients set lastliving = $db_timer where cid=$clientId and status = 1 limit 1";
 								$db->query($query);
 								if (1 != $db->affected_rows){
-									errorlog('db.living update 失败 (namepipe),疑似Drone主动下线...cid:'."$clientId",2);
+									GlobalFunc::errorlog('db.living update 失败 (namepipe),疑似Drone主动下线...cid:'."$clientId",2);
 									$active_offline = true;
 								}
 								$db->close();
@@ -232,10 +227,10 @@ class HYP_IPC{
 				}
 				fclose($pipe);
 			}else{
-				errorlog('Error: fopen fifo_file : '.$fifo_file);
+				GlobalFunc::errorlog('Error: fopen fifo_file : '.$fifo_file);
 			}
 						
-			$db = connect_db($mysql_ini);
+			$db = GlobalFunc::connect_db($mysql_ini);
 			if ($db){		
 				if (!$mac_record_cleared){
 					$query = 'delete from '.$mysql_ini['prefix']."online_mac where cid=$clientId limit $mac_num";
@@ -261,7 +256,7 @@ class HYP_IPC{
 			unlink($fifo_file);						   		
 		}
 		
-		errorlog('namepipe.keeplive 结束返回...cid:'."$clientId",2);
+		GlobalFunc::errorlog('namepipe.keeplive 结束返回...cid:'."$clientId",2);
 	}
 
 	//ret 返回个数

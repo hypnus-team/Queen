@@ -6,13 +6,13 @@ set_time_limit(0);
 ignore_user_abort(true); 
 
 include "../include/config.inc.php";
-include "./include/global.func.php";
+include "../library/global.func.php";
 
 
-
-
-
-
+//回显
+//  0 任务结束或出现错误，通知Drone不要继续关于此任务进行通讯
+//  1 完成，继续 ... 对stream有效
+//
 include "$IPC_mod_path".'IPC_'.HYP_IPC_MODE.'.php';
 
 $ret = 0;
@@ -25,29 +25,29 @@ $cid    = intval($_GET['cid']);
 if (!preg_match('/^[a-zA-Z0-9]{32}$/',$tid)){
     
 }else{
-	$db = connect_db($mysql_ini);
+	$db = GlobalFunc::connect_db($mysql_ini);
 	if ($db){
 		if ($status){
 			$status = -$status;
 			$query = 'update '.$mysql_ini['prefix'].'online_task set status = '.$status.' where tid=\''.$tid.'\' and status=1 and cid='.$cid.' limit 1';
 			$db->query($query);
             HYP_IPC::task_response($tid,$cid.':'.$status,':',"");
-			
+			//mylog($query);	
 		}else{
 			$query = 'select chunk,status,size,module from '.$mysql_ini['prefix'].'online_task where tid=\''.$tid.'\' and cid='.$cid.' limit 1' ;
 
 			$result = $db->query($query);
 			if (1 === mysqli_num_rows($result)){
 				$result = $result->fetch_assoc();
-				if ($result['chunk']){ 
+				if ($result['chunk']){ //stream
 					if ((1 == $result['status']) or (2 == $result['status'])){
 						$data = @file_get_contents('php://input');
 						$c_size = strlen($data);
 						if ($c_size){
-							$c_stream_file = get_stream_path($tid);
+							$c_stream_file = GlobalFunc::get_stream_path($tid);
                             if ($c_size === file_put_contents($c_stream_file.$tid.'.DOWN.'.$result['chunk'],$data)){
 								$query = 'update '.$mysql_ini['prefix'].'online_task set status = 2,chunk=chunk+1';
-								if (($stream_size) and (0 == $result['size'])){ 
+								if (($stream_size) and (0 == $result['size'])){ //以控制端请求长度为准
 									$query .= ',size= '.$stream_size;
 								}
 								$query .=  ' where tid=\''.$tid.'\' and cid='.$cid.' limit 1' ;
@@ -57,13 +57,13 @@ if (!preg_match('/^[a-zA-Z0-9]{32}$/',$tid)){
 							}
 						}
 					}
-				}else{                 
+				}else{                 //normal
 					if (1 == $result['status']){
 						$data = @file_get_contents('php://input');
 
 						$status = 2;
                                             
-						$pipeOk = HYP_IPC_task_response($tid,$cid.':'.$status.':',$data);
+						$pipeOk = HYP_IPC::task_response($tid,$cid.':'.$status.':',$data);
 
 						if (!$pipeOk){
 							if (strlen($data)){
@@ -81,15 +81,15 @@ if (!preg_match('/^[a-zA-Z0-9]{32}$/',$tid)){
 
 						mylog($query);
 
-						if ('0001'.'0000000000000000000000000000' === $result['module']){ 
+						if ('0001'.'0000000000000000000000000000' === $result['module']){ //sys remained mid . mod loader
 							if ($i = strpos($data,"$m=")){
 								$i += 4 + 2;
 							    $new_mid = strtoupper(substr($data,$i,32));
 								if (preg_match('/^[A-F0-9]{32}$/',$new_mid)){
 									$insert_mid = false;
-                                    if ('$r=0' === substr($data,0,4)){ 
+                                    if ('$r=0' === substr($data,0,4)){ //success
 										$insert_mid = true;
-									}elseif ('$r=5' === substr($data,0,4)){ 
+									}elseif ('$r=5' === substr($data,0,4)){ //exist , check it
 									    $query = 'select cid from '.$mysql_ini['prefix'].'online_module where cid='.$cid.' and module=\''.$new_mid.'\' limit 1';
 										$result = $db->query($query);
 										if (0 === mysqli_num_rows($result)){

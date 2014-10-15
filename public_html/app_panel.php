@@ -10,7 +10,7 @@
    if (!$clientId){
        $lasterror[] = $language['client_off_line'];
    }else{
-	   $db = connect_db($mysql_ini);
+	   $db = GlobalFunc::connect_db($mysql_ini);
 	   if (!$db){
 		   $lasterror[] = $language['fail_db'];
 	   }
@@ -33,7 +33,7 @@
 		   }else{
 			   $drone_name = htmlspecialchars(trim($result['name']));
 		   }
-		   $drone_name = clip_str_width($drone_name);
+		   $drone_name = GlobalFunc::clip_str_width($drone_name);
 
 		   $shortcuts_num = $result['shortcuts_num'];
 		   $same_mod_filter = array(); 
@@ -51,8 +51,8 @@
 			   }
 			   for (;$i > 0 ;$i --){	
 				   $tmp = $result->fetch_assoc();
-                   $mod_name_array = get_mod_name($tmp['module'],$language_choosed);
-				   $tmp['title'] = clip_str_width($mod_name_array['name']);
+                   $mod_name_array = GlobalFunc::get_mod_name($tmp['module'],$language_choosed);
+				   $tmp['title'] = GlobalFunc::clip_str_width($mod_name_array['name']);
 				   $tmp['name']  = $mod_name_array['name'];	
 				   
 				   if (isset ($same_mod_filter[$tmp['root']])){

@@ -4,6 +4,10 @@
    require "./include/common.inc.php";       
    require "$languagedir"."./request.lang.php";	
 
+   $module_charset = array( //模块字符集定义 iconv函数使用 (by db_modules.charset)
+	    0 => 'UTF-8',
+        1 => 'GB2312',		
+   );  
 
    $clientId   = intval($_GET['cid']);
    $moduleId   = strtoupper($_GET['mid']);
@@ -14,7 +18,7 @@
        $header['content-type'] = 'application/binary';
    }
 
-   $db = connect_db($mysql_ini);
+   $db = GlobalFunc::connect_db($mysql_ini);
    if (!$db){
        $lasterror[] = $language['fail_db'];
    }else{  
@@ -52,7 +56,7 @@
 		   $result = $db->query($query);
 		   if (1 == mysqli_num_rows($result)){
 			   $tmp = $result->fetch_assoc();
-			   $clientName = clip_str_width($tmp['name']);
+			   $clientName = GlobalFunc::clip_str_width($tmp['name']);
 
 			   $query = 'select b.module,b.charset from '.$mysql_ini['prefix'].'online_module as a left join '.$mysql_ini['prefix'].'modules as b on b.module=a.module where a.cid='.$clientId.' and a.module=\''.$moduleId.'\' limit 1';
 			   $result = $db->query($query);
@@ -60,8 +64,8 @@
 				   $lasterror[] =  $language['no_mid_client'];
 			   }else{				   				
 				   $tmp = $result->fetch_assoc();
-				   $mod_name_array = get_mod_name($tmp['module'],$language_choosed);
-				   $moduleName = clip_str_width($mod_name_array['name']);					   
+				   $mod_name_array = GlobalFunc::get_mod_name($tmp['module'],$language_choosed);
+				   $moduleName = GlobalFunc::clip_str_width($mod_name_array['name']);					   
 				   if ($data){
 					   if (0 != $tmp['charset']){
 						   $data = iconv($module_charset[$tmp['charset']],"utf-8//IGNORE",$data);
@@ -81,7 +85,7 @@
 		  $query = 'insert into '.$mysql_ini['prefix'].'online_task_lock values(?)';
 		  $stmt = $db->prepare($query);
 		  for ($retry = 10;$retry;$retry -- ){
-			  $TaskId = random(32);
+			  $TaskId = GlobalFunc::random(32);
 			  $stmt->bind_param('s',$TaskId);
 			  if (!$stmt->execute()){
 				  if ((false !== strstr($stmt->error,'Duplicate')) and ($retry > 1)){
@@ -160,7 +164,7 @@
 	   $chunk_output = 1;
 	   $waitSeconds  = 0;
 
-	   $stream_file  = get_stream_path($TaskId,false);
+	   $stream_file  = GlobalFunc::get_stream_path($TaskId,false);
 	   $stream_file .= "$TaskId".'.DOWN.';
 
        $query = 'select chunk,size,status from '.$mysql_ini['prefix'].'online_task where tid=\''.$TaskId.'\' limit 1';
@@ -220,7 +224,7 @@
 			  
 			   $db->close();
 			   sleep ($waitSecPer);
-			   $db = connect_db($mysql_ini);
+			   $db = GlobalFunc::connect_db($mysql_ini);
 			   if (!$db){
 				   $lasterror[] = $language['fail_db'].' StreamLoop';
 				   $end_status = STREAM_TASK_END_CONNMYSQL;
