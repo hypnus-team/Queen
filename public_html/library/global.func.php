@@ -87,19 +87,19 @@ class GlobalFunc{
 	//返回dummy_id,有则返回，无则新建
 	public static function get_dummy_from_cid($uid,$cid,$db,$mysql_ini){
 		$dummy = false;
-		$query = 'select dummy,mid from '.$mysql_ini['prefix'].'online_clients where cid='.$cid.' and owner='.$uid.' limit 1';
+		$query = 'select dummy,mid from '.$mysql_ini['prefix'].'online_clients where cid='.$cid.' limit 1';
 		$result = $db->query($query);
 		if (1 === mysqli_num_rows($result)){
 			$tmp = $result->fetch_assoc();
 			$dummy = $tmp['dummy'];
 			if (0 == $dummy){ //need create new!
-				$query = 'insert into '.$mysql_ini['prefix'].'dummy values (NULL,'.$uid.',1,\'\',0)';
+				$query = 'insert into '.$mysql_ini['prefix'].'dummy values (NULL,1,\'\',0)';
 				$db->query($query);
 				$dummy = $db->insert_id;
 				if ($dummy){
-					$query = 'insert into '.$mysql_ini['prefix'].'dummy_clients values ('.$uid.',\''.$tmp['mid'].'\','.$dummy.')';
+					$query = 'insert into '.$mysql_ini['prefix'].'dummy_clients values (\''.$tmp['mid'].'\','.$dummy.')';
 					$db->query($query);
-					$query = 'update '.$mysql_ini['prefix'].'online_clients set dummy = '.$dummy.' where cid='.$cid.' and owner='.$uid.' limit 1';
+					$query = 'update '.$mysql_ini['prefix'].'online_clients set dummy = '.$dummy.' where cid='.$cid.' limit 1';
 					$db->query($query);
 				}
 			}
