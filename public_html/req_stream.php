@@ -131,7 +131,7 @@
 	   if (!$lasterror){
 		   include "$IPC_mod_path".'IPC_'.HYP_IPC_MODE.'.php';
 		   $cid["$clientId".'_'."$moduleId"]['cid'] = $clientId;
-		   $requestStatus = HYP_IPC::task_send();	
+		   $requestStatus = HYP_IPC::task_send($TaskId,$cid,$moduleId,$data);
 		   $query = 'update '.$mysql_ini['prefix'].'online_task set status = '.$requestStatus.' where tid=\''.$TaskId.'\' and status=-9 limit 1';
 		   if ($db->query($query)){
 			   $requestStatus = 0;			       
@@ -166,7 +166,6 @@
 
 	   $stream_file  = GlobalFunc::get_stream_path($TaskId,false);
 	   $stream_file .= "$TaskId".'.DOWN.';
-
        $query = 'select chunk,size,status from '.$mysql_ini['prefix'].'online_task where tid=\''.$TaskId.'\' limit 1';
        while (!$lasterror){
 		   $result = $db->query($query);
