@@ -3,7 +3,24 @@
 
 InstanceArray = new Array(null);
 InstanceReserveArray = new Array();
+InstanceTidArray = new Array();
+InstanceTid = 1;
 
+
+function InstanceTidNew(){
+	return InstanceTid++;    
+}
+
+function InstanceTidSet(InstanceID,InstTid){
+	InstanceTidArray[InstanceID] = InstTid;
+}
+
+function InstanceTidCheck(InstanceID,Tid){
+    if (Tid == InstanceTidArray[InstanceID]){
+		return true;
+    }
+	return false;
+}
 
 function InstanceCheck(InstanceID,cid,mid){
     if ((InstanceArray[InstanceID]) && (InstanceArray[InstanceID] == cid+"_"+mid)){
@@ -41,6 +58,7 @@ function InstanceGet(uniqu,alwaysCreate){
 	}else{
 		InstanceArray[InstanceID] = uniqu;
 	}
+	InstanceTidArray[InstanceID] = 1;
 	return InstanceID;
 }
 

@@ -291,7 +291,7 @@ function open_mod_multi(cid,mid){
 	if (document.getElementById("switcher_ban").className.indexOf(" active") >= 0){		
 		switch_group_effects_do(cid,mid,instance,1);
 	}
-	do_request(cid,mid,null,'',null,instance,null,null,null);
+	do_request(mid,null,'',null,instance,null,null,false);
 
 }
 
@@ -335,7 +335,7 @@ function multi_exec_shortcut(sid,cid,mid){
 	if (document.getElementById("switcher_ban").className.indexOf(" active") >= 0){		
 	    switch_group_effects_do(cid,mid,instance,1);
 	}
-    do_request(cid,mid,sid,'',null,instance,null,null,null);
+    do_request(mid,sid,'',null,instance,null,null,false);
 }
 
 function destroy_simple_panel(){

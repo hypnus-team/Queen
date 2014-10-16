@@ -49,16 +49,17 @@
    }
 
    function mod_request(cid,mid,instance,data,callback,callback_params){
-       do_request(cid,mid,null,data,null,instance,callback,callback_params,null);
+       do_request(mid,null,data,null,instance,callback,callback_params,false);
    }
 
    function mod_request_sentinel(tid,cid,mid,instance){
 	   document.getElementById("TID_"+instance).innerHTML = "<a id=\"Tid_"+tid+"\"></a>";
-	   do_request(cid,mid,null,null,tid,cid,null,null,null);
+	   do_request(mid,null,null,tid,cid,null,null,false);
    }
 
                          
-   function do_request(cid,mid,sid,data,tid,instance,callback,callback_params,remain_unit){	  
+   function do_request(mid,sid,data,tid,instance,callback,callback_params,InstTid){
+
 	 try{
 	   if (!tid){          
 		  var ShortCutsContents = "";
@@ -73,10 +74,9 @@
 		  if (document.getElementById("TITLE_"+instance).innerHTML == ""){
               getdata += "&reqtitle=1";			  
 		  }		  
-          //check group effects 		  
-		  
-		  var cid = get_effect_clients(instance,mid);
-		  var explodeInstance = cid.split(";");
+          //check group effects 		  		  
+		  var instance = get_effect_clients(instance,mid);
+		  var explodeInstance = instance.split(";");
 
 		  for(i=0; i<explodeInstance.length; i++){
 			  var tmp = explodeInstance[i].split("@",2);
@@ -87,11 +87,11 @@
 					  if (!callback){
 						  document.getElementById("SCC_"+tmp[0]).value=ShortCutsContents;
 					  }					  
-				  }
+				  }				  
 			  }
 		  }
 
-		  getdata += "&cid="+cid
+		  getdata += "&cid="+instance;
 
 	   }else{
           if (null == document.getElementById("Tid_"+tid)){	
@@ -99,6 +99,18 @@
 			  return;
           }
 	      getdata = "tid="+tid+"&cid="+instance+"&mid="+mid;
+	   }
+       
+	   //初始化 instance <-> tid
+   	   if (false == InstTid){ 
+			 InstTid = InstanceTidNew();
+			 var explodeInstance = instance.split(";");
+			 for(i=0; i<explodeInstance.length; i++){
+				  var tmp = explodeInstance[i].split("@",2);
+				  if (tmp[0]){
+					  InstanceTidSet(tmp[0],InstTid);
+				  }
+			 }
 	   }
 
 	   if ("block" == document.getElementById("multiPanel").style.display){
@@ -110,7 +122,7 @@
 		   url : "./request.php?"+getdata,
 		   data: data,
 		   success : function(result) {
-			   show_do_request(result,tid,mid,callback,callback_params);
+			   show_do_request(result,tid,mid,callback,callback_params,InstTid);
 		   },
 		   error : function(result){
 			   try{                 
@@ -137,7 +149,7 @@ function get_effect_clients(instance,mid){
 	return instance;
 }
 
-function show_do_request(result,tid,mid,callback,callback_params){
+function show_do_request(result,tid,mid,callback,callback_params,InstTid){
    var c_tid;
    var remain_cid = "";
    try{	
@@ -159,6 +171,10 @@ function show_do_request(result,tid,mid,callback,callback_params){
 			 if (!InstanceCheck(c_uniqu,c_response.cid,mid)){ // 识别 instance 仍然有效且未被更改
 				 continue;
 			 }
+			 if (!InstanceTidCheck(c_uniqu,InstTid)){ // InstTid 已不是当前 Tid
+				 //alert ("InstTid expired... " + InstTid + " != now: " + InstanceTidArray[c_uniqu]);
+                 continue;
+			 }
 			 if (document.getElementById("STATU_"+c_uniqu)){					 					
 				 if (c_response.keepRequest){
 					 document.getElementById("STATU_"+c_uniqu).innerHTML="<img src=\"./templates/bootstrap/img/loading-mini.gif\">";
@@ -171,10 +187,10 @@ function show_do_request(result,tid,mid,callback,callback_params){
 					 }else{
 						 document.getElementById("STATU_"+c_uniqu).innerHTML="";
 					 }
-					 if (!callback){
+					 if (!callback){						 
 						 if (callback_params){
-							 if (document.getElementById(callback_params)){
-							     document.getElementById(callback_params).innerHTML=c_response.content;
+							 if (document.getElementById(callback_params+c_uniqu)){								 
+							     document.getElementById(callback_params+c_uniqu).innerHTML=c_response.content;
 							 }else{
 							     callback_params = 0;
 							 }
@@ -199,7 +215,7 @@ function show_do_request(result,tid,mid,callback,callback_params){
 			 }
 		 }
 		 if (keepAlive == true){
-			 timeId = setTimeout(function(){do_request(remain_cid,mid,null,null,c_tid,remain_cid,callback,callback_params,null);},1);
+			 timeId = setTimeout(function(){do_request(mid,null,null,c_tid,remain_cid,callback,callback_params,InstTid);},1);
 			 //timeId = setTimeout(function(){do_request(cid,mid,sid,null,response.tid,c_uniqu,callback,callback_params,remain_unit);},1);
 		 }
 	 }else{
