@@ -220,8 +220,6 @@ function opt_panel_close_{$MID}(uniqu){
     document.getElementById("Chown_"+uniqu).style.display="none";
     document.getElementById("Upload_"+uniqu).style.display="none";
     document.getElementById("Download_"+uniqu).style.display="none";	
-    //document.getElementById("Edit_"+uniqu).style.display="none";
-	//document.getElementById("Edit_Notify_"+uniqu).innerHTML="";
 	document.getElementById("Edit_"+uniqu).innerHTML="";
 	
 }
@@ -415,7 +413,6 @@ function save_edit_{$MID}(cid,uniqu,basedir,filename){
 	params += "&c="+encodeURIComponent(contents);
 	if (document.getElementById("Edit_"+uniqu)){
 		document.getElementById("Edit_"+uniqu).innerHTML="saving...";
-        //document.getElementById("Edit_Notify_"+uniqu).innerHTML="saving...";
 	}	
 	mod_request(cid,'{$MID}',uniqu,params,0,"Edit_");
 }
