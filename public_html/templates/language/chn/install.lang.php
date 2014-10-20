@@ -16,6 +16,7 @@ $language += array
 	 'error_parse_sql'                => '导入sql文件失败',
 	 'error_import_sql'               => '导入sql语句失败',
 	 'error_some_sql_import'          => ' 个sql表导入失败',
+	 'not_emtpy_table'                => '数据库表不为空',
 	 'success_complete'               => '安装成功完成',
 	 'error_read_config_inc'          => '读取配置文件失败',
 	 'error_write_config_ini'         => '写入配置文件失败',
