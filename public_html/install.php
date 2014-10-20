@@ -16,7 +16,7 @@ $config_ini_file = './include/config.inc.php';
    define('HYPNUS_ROOT', dirname(__FILE__).'/');  
    define('TPLDIR',HYPNUS_ROOT."./templates/");   
 
-   require './include/global.func.php';
+   require './library/global.func.php';
 
    $language_choosed = 'chn';
    $template_choosed = 'bootstrap';
@@ -173,24 +173,29 @@ $config_ini_file = './include/config.inc.php';
 				if (mysqli_connect_errno()){	
 					$lasterror[] = mysqli_connect_error();
 				}else{
-					@$db->query("SET character_set_connection=utf8, character_set_results=utf8, character_set_client=binary");
-					$j = 0;
-					foreach ($sql_result as $a){
-						@$db->query($a);
-						$check = substr($a,0,6);
-						if ('CREATE' == $check){
-						    $j ++;
-						}elseif ('REPLAC' == $check){
-						    if (0 >= $db->affected_rows){
-							    $lasterror[] = $language['error_sql_insert'].' '.$a;
+					$result = $db->query("SHOW TABLES");
+					if (0 < mysqli_num_rows($result)){
+					    $lasterror[] = $language['not_emtpy_table'];
+					}else{
+						@$db->query("SET character_set_connection=utf8, character_set_results=utf8, character_set_client=binary");
+						$j = 0;
+						foreach ($sql_result as $a){
+							@$db->query($a);
+							$check = substr($a,0,6);
+							if ('CREATE' == $check){
+								$j ++;
+							}elseif ('REPLAC' == $check){
+								if (0 >= $db->affected_rows){
+									$lasterror[] = $language['error_sql_insert'].' '.$a;
+								}
 							}
 						}
-					}
-					$result = $db->query("SHOW TABLES");
-					$i = mysqli_num_rows($result);
-					if ($i != $j){
-						$i = $j - $i;
-					    $lasterror[] = $i.$language['error_some_sql_import'];
+						$result = $db->query("SHOW TABLES");
+						$i = mysqli_num_rows($result);
+						if ($i != $j){
+							$i = $j - $i;
+							$lasterror[] = $i.$language['error_some_sql_import'];
+						}
 					}
 				}
 		   }else{

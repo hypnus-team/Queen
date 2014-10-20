@@ -16,7 +16,7 @@
    }
 
    if (!$lasterror){
-	   $db = connect_db($mysql_ini);
+	   $db = GlobalFunc::connect_db($mysql_ini);
 	   if ($db===FALSE){
 		   $lasterror[] =  $language['fail_db'];
 	   }else{			

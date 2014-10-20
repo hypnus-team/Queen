@@ -16,7 +16,7 @@ if (!$lasterror){
    $result_modules_array = array();
    $tmp_array            = array();
 
-   $db = connect_db($mysql_ini);
+   $db = GlobalFunc::connect_db($mysql_ini);
    if (!$db){
        $lasterror[] = $language['fail_db'];
    }else{
@@ -65,7 +65,7 @@ if (!$lasterror){
 
            
 		   foreach ($tmp_array as $a => $b){
-		       $tmp_array[$a] += get_mod_name($b['module'],$language_choosed);
+		       $tmp_array[$a] += GlobalFunc::get_mod_name($b['module'],$language_choosed);
 		   }
 
            

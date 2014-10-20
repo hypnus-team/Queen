@@ -94,7 +94,7 @@ class Template
 		$template = file_get_contents($tplfile);
 
 		for($i = 1; $i<=3; $i++) {
-			if(strexists($template, '{subtemplate')) {
+			if(GlobalFunc::strexists($template, '{subtemplate')) {
 				$template = preg_replace("/[\n\r\t]*\{subtemplate\s+([a-z0-9_]+)\}[\n\r\t]*/ies", "loadsubtemplate('\\1')", $template);
 			}
 		}        

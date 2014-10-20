@@ -1,4 +1,4 @@
-<? if (!class_exists('template')) die('Access Denied');$template->getInstance()->check('index.htm', 'c9ddddc3a0399bcb24f538803a2611c2', 1406860904);?>
+<? if (!class_exists('template')) die('Access Denied');$template->getInstance()->check('index.htm', '2ce9787e21b6432f7e830ac5cfe7aacd', 1413427898);?>
 <? if($e) { ?>
 <div class="alert alert-error">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -84,7 +84,7 @@
   <strong>Warning!</strong> No any file has been checked.
   </div>        
 </div>
-<div id="Edit_<?=$UNIQU?>" style="display:none;"></div>
+<div id="Edit_<?=$UNIQU?>"></div>
 </center>
 <hr><? if(is_array($opt)) { foreach($opt as $key => $value) { ?><input type="button" value="<?=$value?>" name="Opt" onclick="javascript:opt_panel_<?=$MID?>('<?=$value?>','<?=$UNIQU?>');">&nbsp;<? } } ?><input type="button" value="Download" onclick="javascript:download_<?=$MID?>('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','<?=$basedir4url?>');">
 <input type="button" value="Edit" onclick="javascript:edit_<?=$MID?>('<?=$CID?>','<?=$MID?>','<?=$UNIQU?>','<?=$basedir4url?>');">

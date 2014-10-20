@@ -13,7 +13,7 @@
    $actSrcType  = intval($_POST['srcType']);
    $newmid      = $_POST['newmid'];   
 
-   $db = connect_db($mysql_ini);		
+   $db = GlobalFunc::connect_db($mysql_ini);		
    if ($db===FALSE){
 	   $lasterror[] = $language['fail_db'];
    }
@@ -61,7 +61,7 @@
 		   $query_token = "";
 
 		   if (3 == $actType){ 
-			   $dummy_id = get_dummy_from_cid($uid,$actAid,$db,$mysql_ini);
+			   $dummy_id = GlobalFunc::get_dummy_from_cid($uid,$actAid,$db,$mysql_ini);
 			   if ($dummy_id){
 				   $actType = 2;
 				   $actAid  = $dummy_id;
@@ -317,7 +317,7 @@ function get_all_module_array($db){
         $ret['content'][$mid]['root']    = $root;
         $ret['content'][$mid]['version'] = $ver;
 		
-		$a = get_mod_name($mid,$language_choosed);
+		$a = GlobalFunc::get_mod_name($mid,$language_choosed);
 		
 		$ret['content'][$mid]['name'] = $a['name'];
 	}

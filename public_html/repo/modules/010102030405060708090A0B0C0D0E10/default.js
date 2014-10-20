@@ -220,7 +220,7 @@ function opt_panel_close_{$MID}(uniqu){
     document.getElementById("Chown_"+uniqu).style.display="none";
     document.getElementById("Upload_"+uniqu).style.display="none";
     document.getElementById("Download_"+uniqu).style.display="none";	
-    document.getElementById("Edit_"+uniqu).style.display="none";
+	document.getElementById("Edit_"+uniqu).innerHTML="";
 	
 }
 
@@ -240,7 +240,7 @@ function ajaxFileUpload_{$MID}(cid,uniqu,basedir){
     
 	document.getElementById("Upload_Status_"+uniqu).innerHTML="<strong>uploading to server ...</strong>";
     
-	cid = get_effect_clients(cid,'{$MID}');
+	cid = get_effect_clients(uniqu,'{$MID}');
    
 	$.ajaxFileUpload_{$MID}
 	(
@@ -391,7 +391,7 @@ function edit_{$MID}(cid,mid,uniqu,basedir){
 			}
 		}
 	}
-	mod_request(cid,'{$MID}',uniqu,params,0,"Edit_"+uniqu);	    
+	mod_request(cid,'{$MID}',uniqu,params,0,"Edit_");	    
 }
 function cancel_edit_{$MID}(uniqu){
     document.getElementById("editdom_"+uniqu).innerHTML = "";
@@ -412,7 +412,7 @@ function save_edit_{$MID}(cid,uniqu,basedir,filename){
 	}
 	params += "&c="+encodeURIComponent(contents);
 	if (document.getElementById("Edit_"+uniqu)){
-        document.getElementById("Edit_"+uniqu).innerHTML="saving...";
+		document.getElementById("Edit_"+uniqu).innerHTML="saving...";
 	}	
-	mod_request(cid,'{$MID}',uniqu,params,0,"Edit_"+uniqu);
+	mod_request(cid,'{$MID}',uniqu,params,0,"Edit_");
 }

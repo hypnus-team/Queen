@@ -8,8 +8,9 @@
     <div align="center"  id="multi_toolkit" class="span12">
 	<div class="btn-toolbar" style="margin:0;">
 	<div class="btn-group">
-	  <button class="btn" id="switcher_clist" OnClick="javascript:toolkit_switcher('switcher_clist',0);"><i class="icon-th-list"></i></button>
-	  <button class="btn" id="switcher_glist" OnClick="javascript:toolkit_switcher('switcher_glist',0);"><i class="icon-th"></i></button>	  
+	  <button class="btn" id="switcher_clist"    OnClick="javascript:toolkit_switcher('switcher_clist',0);"><i class="icon-th-list"></i></button>
+	  <button class="btn" id="switcher_glist"    OnClick="javascript:toolkit_switcher('switcher_glist',0);"><i class="icon-th"></i></button>	  
+	  <button class="btn" id="switcher_instance" OnClick="javascript:toolkit_switcher('switcher_instance',0);"><i class="icon-plus"></i></button>
     </div>  
 	<div class="btn-group">
 	  <button class="btn" id="switcher_show" OnClick="javascript:toolkit_switcher('switcher_show',0);"><i class="icon-eye-close"></i></button>
@@ -30,6 +31,7 @@
 <script src="{$tplpath}/js/hyp_cpanel.js"></script>
 <script src="{$tplpath}/js/hyp_request.js"></script> 
 <script src="{$tplpath}/js/hyp_multi_panel.js"></script>
+<script src="{$tplpath}/js/hyp_instance.js"></script>
 <!--{if !(($lastsuccess) or ($lasterror))}-->
 <script>
    window.onload=function(){toolkit_switcher('switcher_clist',1);toolkit_switcher('switcher_ban',1);}

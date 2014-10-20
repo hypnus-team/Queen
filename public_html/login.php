@@ -14,7 +14,7 @@
    
    $userIP = $_SERVER["REMOTE_ADDR"]; 
 
-   $db = connect_db($mysql_ini);			   
+   $db = GlobalFunc::connect_db($mysql_ini);			   
    if ($db===FALSE){	
 	   $lasterror[] =  $language['fail_db'];
    }else{		
@@ -72,7 +72,7 @@ if ($_POST['submit']){
 				   $db->query("$query");                           
 				   unset ($lasterror);
                    $result['uid'] = 999; 
-				   set_member_session($result,$cookiepre,$username);
+				   GlobalFunc::set_member_session($result,$cookiepre,$username);
 				   
   			       
 				   
