@@ -1,3 +1,3 @@
 <?php
-exit "not install yet.";
+exit ("not install yet.");
 ?>
