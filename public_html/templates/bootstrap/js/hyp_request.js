@@ -122,14 +122,10 @@
 		   url : "./request.php?"+getdata,
 		   data: data,
 		   success : function(result) {
-			   show_do_request(result,tid,mid,callback,callback_params,InstTid);
+			   show_do_request(instance,result,tid,mid,callback,callback_params,InstTid);
 		   },
 		   error : function(result){
-			   try{                 
-				 document.getElementById("STATU_"+instance).innerHTML='fail to connect srv';
-			   }catch(e){
-			     alert("js runtime fail(func do_request.error): "+e.description);
-			   }
+			   show_fail_do_request(InstTid,mid,instance,'fail to connect srv');			   
 		   }
 
 	   });	
@@ -137,6 +133,32 @@
 	     alert("js runtime fail(func do_request): "+e.description);
 	 }
    }
+
+function show_fail_do_request(tid,mid,instance,Message){
+
+    var explodeInstance = instance.split(";");
+
+    for(i=0; i<explodeInstance.length; i++){
+		var tmp = explodeInstance[i].split("@",2);
+		if (tmp[0] > 0){		
+			if (document.getElementById("STATU_"+tmp[0])){
+				if (!InstanceCheck(tmp[0],tmp[1],mid)){
+					//alert ("InstanceCheck " + tmp[0] + ":" + tmp[1] + ":" + mid);
+					continue;
+				}
+				if (!InstanceTidCheck(tmp[0],tid)){
+					//alert ("InstanceTidCheck " + tmp[0] + ":" + tid);
+					continue;
+				}
+				//alert ("STATU_"+tmp[0]);
+				document.getElementById("STATU_"+tmp[0]).innerHTML=Message;
+			}		  
+		}
+	}
+
+
+
+}
 
 function get_effect_clients(instance,mid){	
 	instance = ";"+InstanceToCid(instance)+";";
@@ -149,12 +171,16 @@ function get_effect_clients(instance,mid){
 	return instance;
 }
 
-function show_do_request(result,tid,mid,callback,callback_params,InstTid){
+function show_do_request(instance,result,tid,mid,callback,callback_params,InstTid){
    var c_tid;
    var remain_cid = "";
-   try{	
+   try{
+	   if (!result){
+		   show_fail_do_request(InstTid,mid,instance,"empty response");
+		   return;
+	   }
 	 var ret = decodeURIComponent(result);				     
-	 ret = eval('(' + ret + ')');   
+	 ret = eval('(' + ret + ')');
 	 var keepAlive = false;
 	 var i = 0;
 	 if (ret["tips"]){
